@@ -1,0 +1,69 @@
+﻿// DrawingHandlers.idl: DrawingHandlers 的 IDL 源
+//
+
+// 此文件将由 MIDL 工具处理以
+// 生成类型库(DrawingHandlers.tlb)和封送处理代码。
+
+import "oaidl.idl";
+import "ocidl.idl";
+
+[
+	object,
+	uuid(ab29b93d-d2ed-4771-aaab-f4d3e9daa61b),
+	pointer_default(unique)
+]
+interface IPreview : IUnknown
+{
+};
+
+[
+	object,
+	uuid(82f5d6a9-adba-47ac-ab40-4c68030244ed),
+	pointer_default(unique)
+]
+interface IThumbnail : IUnknown
+{
+};
+
+[
+	object,
+	uuid(61e93e7e-86e6-45a0-89a0-518eccd66b8e),
+	pointer_default(unique)
+]
+interface ISearch : IUnknown
+{
+};
+
+[
+	uuid(03962ece-ade0-4449-84be-58fcf77c2f78),
+	version(1.0),
+]
+library DrawingHandlersLib
+{
+	importlib("stdole2.tlb");
+	[
+		uuid(a3cfa65a-56b8-4b72-babc-d8f87601caac)
+	]
+	coclass Preview
+	{
+		[default] interface IPreviewHandler;
+	};
+	[
+		uuid(937f885d-45e7-40ae-b679-f77a8edbdf5c)
+	]
+	coclass Thumbnail
+	{
+		[default] interface IThumbnailProvider;
+	};
+	[
+		uuid(0bd4544c-f714-4571-b21f-2c01dd7983fa)
+	]
+	coclass Search
+	{
+		[default] interface IFilter;
+	};
+};
+
+import "shobjidl.idl";
+import "thumbcache.idl";
+import "filter.idl";
