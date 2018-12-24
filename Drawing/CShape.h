@@ -30,6 +30,7 @@ private:
 class CSquare :public CShape
 {
 public:
+	CSquare();
 	CSquare(int orgX, int orgY, int width);
 	CSquare(int orgX, int orgY, int width, COLORREF borderColor, int borderType, int borderWidth, COLORREF fillColor, int fillType);
 	~CSquare();
@@ -38,5 +39,6 @@ public:
 	void Serialize(CArchive &ar);
 private:
 	int width;
+	DECLARE_SERIAL(CSquare)
 };
 

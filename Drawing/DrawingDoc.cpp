@@ -12,6 +12,7 @@
 #include "DrawingDoc.h"
 
 #include <propkey.h>
+#include "CShape.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -35,6 +36,21 @@ CDrawingDoc::CDrawingDoc() noexcept
 
 CDrawingDoc::~CDrawingDoc()
 {
+	this->DeleteContents();
+}
+
+void CDrawingDoc::DeleteContents()
+{
+	// TODO:  在此添加专用代码和/或调用基类
+	for (int i = 0; i < m_Elements.GetSize(); i++)
+	{
+		CShape* p = (CShape*)m_Elements[i];
+		delete(p);
+	}
+	m_Elements.RemoveAll();
+
+	CDocument::DeleteContents();
+
 }
 
 BOOL CDrawingDoc::OnNewDocument()
@@ -58,6 +74,7 @@ void CDrawingDoc::Serialize(CArchive& ar)
 	if (ar.IsStoring())
 	{
 		// TODO: 在此添加存储代码
+		m_Elements.Serialize(ar);
 	}
 	else
 	{

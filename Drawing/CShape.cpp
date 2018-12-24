@@ -1,6 +1,13 @@
 #include "stdafx.h"
 #include "CShape.h"
- 
+
+IMPLEMENT_SERIAL(CSquare, CObject, 1)
+
+
+CSquare::CSquare()
+	: CShape(SQUARE, 0, 0, RGB(0,0,0), PS_SOLID, 0, RGB(0,0,0), 0), width(0)
+{
+}
 
 CSquare::CSquare(int orgX, int orgY, int width):CShape(SQUARE,orgX,orgY,RGB(0,0,0), PS_SOLID, 0 ,RGB(0,0,0), 6), width(width)
 {
@@ -42,6 +49,28 @@ bool CSquare::IsMatched(CPoint pnt)
 
 void CSquare::Serialize(CArchive & ar)
 {
+	if (ar.IsStoring())
+	{
+		ar << (WORD)Type;
+		ar << OrgX << OrgY;//原点坐标
+		ar << BorderColor;//边界颜色
+		ar << BorderType;
+		ar << BorderWidth;//边界宽度
+		ar << FillColor;//
+		ar << FillType;
+	}
+	else
+	{
+		WORD w;
+		ar >> w;
+		Type = (ElementType)w;
+		ar >> OrgX >> OrgY;//原点坐标
+		ar >> BorderColor;//边界颜色
+		ar >> BorderType;
+		ar >> BorderWidth;//边界宽度
+		ar >> FillColor;//
+		ar >> FillType;
+	}
 }
 
 

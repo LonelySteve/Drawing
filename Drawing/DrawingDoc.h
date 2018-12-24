@@ -18,7 +18,7 @@ public:
 	CObArray m_Elements;
 // 操作
 public:
-
+	void DeleteContents();
 // 重写
 public:
 	virtual BOOL OnNewDocument();
