@@ -14,7 +14,8 @@ protected: // 仅从序列化创建
 
 // 特性
 public:
-
+	// 用来存放图像元素的数组
+	CObArray m_Elements;
 // 操作
 public:
 
@@ -40,7 +41,6 @@ protected:
 // 生成的消息映射函数
 protected:
 	DECLARE_MESSAGE_MAP()
-
 #ifdef SHARED_HANDLERS
 	// 用于为搜索处理程序设置搜索内容的 Helper 函数
 	void SetSearchContent(const CString& value);

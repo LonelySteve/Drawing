@@ -12,12 +12,14 @@
 #include "DrawingDoc.h"
 #include "DrawingView.h"
 
+
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
 
 
 // CDrawingView
+#include "CShape.h"
 
 IMPLEMENT_DYNCREATE(CDrawingView, CScrollView)
 
@@ -28,6 +30,7 @@ BEGIN_MESSAGE_MAP(CDrawingView, CScrollView)
 	ON_COMMAND(ID_FILE_PRINT_PREVIEW, &CDrawingView::OnFilePrintPreview)
 	ON_WM_CONTEXTMENU()
 	ON_WM_RBUTTONUP()
+	ON_WM_LBUTTONDOWN()
 END_MESSAGE_MAP()
 
 // CDrawingView 构造/析构
@@ -52,7 +55,7 @@ BOOL CDrawingView::PreCreateWindow(CREATESTRUCT& cs)
 
 // CDrawingView 绘图
 
-void CDrawingView::OnDraw(CDC* /*pDC*/)
+void CDrawingView::OnDraw(CDC* pDC)
 {
 	CDrawingDoc* pDoc = GetDocument();
 	ASSERT_VALID(pDoc);
@@ -60,6 +63,12 @@ void CDrawingView::OnDraw(CDC* /*pDC*/)
 		return;
 
 	// TODO: 在此处为本机数据添加绘制代码
+	for (int i = 0; i < pDoc->m_Elements.GetCount(); i++)
+	{
+		CShape* p = (CShape*)pDoc->m_Elements[i];
+		p->Draw(pDC);
+	}
+
 }
 
 void CDrawingView::OnInitialUpdate()
@@ -110,6 +119,31 @@ void CDrawingView::OnContextMenu(CWnd* /* pWnd */, CPoint point)
 #ifndef SHARED_HANDLERS
 	theApp.GetContextMenuManager()->ShowPopupMenu(IDR_POPUP_EDIT, point.x, point.y, this, TRUE);
 #endif
+}
+
+void CDrawingView::OnLButtonDown(UINT nFlags, CPoint point)
+{
+	// TODO:  在此添加消息处理程序代码和/或调用默认值
+	if ((nFlags&MK_CONTROL) == MK_CONTROL)//Ctrl键按下
+	{
+		CDrawingDoc* pDoc = GetDocument();
+		ASSERT_VALID(pDoc);
+		if (!pDoc)	return;
+
+		CClientDC dc(this);
+		CPoint pntLogical = point;
+		OnPrepareDC(&dc);
+		dc.DPtoLP(&pntLogical);//DP->LP进行转换
+
+		// ----- 测试代码 begin -----
+		CShape * p = new CSquare(pntLogical.x, pntLogical.y, 100);
+		pDoc->m_Elements.Add(p);
+		pDoc->SetModifiedFlag();
+		pDoc->UpdateAllViews(NULL);
+		// ----- 测试代码 end -----
+	}
+	CScrollView::OnLButtonDown(nFlags, point);
+
 }
 
 
