@@ -8,10 +8,11 @@ IMPLEMENT_SERIAL(CSquare, CObject, 1)
 
 #pragma region CShape
 CShape::CShape(ElementType type, int orgX, int orgY)
+	:Type(type), OrgX(orgX), OrgY(orgY)
 {
 }
 CShape::CShape(ElementType type, int orgX, int orgY, COLORREF borderColor, int borderType, int borderWidth, COLORREF fillColor, int fillType)
-	:Type(type), OrgX(orgX), OrgY(orgY), BorderColor(borderColor), BorderType(borderType), BorderWidth(borderWidth), FillColor(fillColor), FillType(fillType)
+	: Type(type), OrgX(orgX), OrgY(orgY), BorderColor(borderColor), BorderType(borderType), BorderWidth(borderWidth), FillColor(fillColor), FillType(fillType)
 {
 }
 
