@@ -1,26 +1,40 @@
 #include "stdafx.h"
 #include "CShape.h"
 
+
+
 IMPLEMENT_SERIAL(CSquare, CObject, 1)
 
 
-CSquare::CSquare()
-	: CShape(SQUARE, 0, 0, RGB(0,0,0), PS_SOLID, 0, RGB(0,0,0), 0), width(0)
+#pragma region CShape
+CShape::CShape(ElementType type, int orgX, int orgY)
+{
+}
+CShape::CShape(ElementType type, int orgX, int orgY, COLORREF borderColor, int borderType, int borderWidth, COLORREF fillColor, int fillType)
+	:Type(type), OrgX(orgX), OrgY(orgY), BorderColor(borderColor), BorderType(borderType), BorderWidth(borderWidth), FillColor(fillColor), FillType(fillType)
 {
 }
 
-CSquare::CSquare(int orgX, int orgY, int width):CShape(SQUARE,orgX,orgY,RGB(0,0,0), PS_SOLID, 0 ,RGB(0,0,0), 6), width(width)
+#pragma endregion
+
+
+#pragma region ×ÓÀà
+#pragma region CSquare
+CSquare::CSquare()
+	: CShape(SQUARE, 0, 0), width(0)
 {
 
+}
+
+CSquare::CSquare(int orgX, int orgY, int width)
+	: CShape(SQUARE, orgX, orgY), width(width)
+{
 }
 
 CSquare::CSquare(int orgX, int orgY, int width, COLORREF borderColor, int borderType, int borderWidth, COLORREF fillColor, int fillType)
-	: CShape(SQUARE, orgX, orgY, borderColor, borderType, borderWidth,fillColor,fillType), width(width)
+	: CShape(SQUARE, orgX, orgY, borderColor, borderType, borderWidth, fillColor, fillType), width(width)
 {
-}
 
-CSquare::~CSquare()
-{
 }
 
 void CSquare::Draw(CDC * pDC)
@@ -73,12 +87,159 @@ void CSquare::Serialize(CArchive & ar)
 	}
 }
 
+#pragma endregion
 
-CShape::CShape(ElementType type , int orgX, int orgY, COLORREF borderColor, int borderType, int borderWidth, COLORREF fillColor, int fillType)
-	:Type(type),OrgX(orgX),OrgY(orgY),BorderColor(borderColor),BorderType(borderType),BorderWidth(borderWidth),FillColor(fillColor),FillType(fillType)
+#pragma region CCircle
+CCircle::CCircle()
+	:CShape(CIRCLE, 0, 0), radius(0)
 {
 }
 
-CShape::~CShape()
+CCircle::CCircle(int orgX, int orgY, int radius)
+	: CShape(CIRCLE, orgX, orgY), radius(radius)
 {
 }
+
+CCircle::CCircle(int orgX, int orgY, int radius, COLORREF borderColor, int borderType, int borderWidth, COLORREF fillColor, int fillType)
+	: CShape(CIRCLE, orgX, orgY, borderColor, borderType, borderWidth, fillColor, fillType), radius(radius)
+{
+}
+
+void CCircle::Draw(CDC * pDC)
+{
+}
+
+bool CCircle::IsMatched(CPoint pnt)
+{
+	return false;
+}
+
+void CCircle::Serialize(CArchive & ar)
+{
+}
+
+#pragma endregion
+
+#pragma region CRectangle
+
+CRectangle::CRectangle()
+	: CShape(RECTANGLE, 0, 0), width(0), height(0)
+{
+}
+
+CRectangle::CRectangle(int orgX, int orgY, int width, int height)
+	: CShape(RECTANGLE, orgX, orgY), width(0), height(0)
+{
+}
+
+CRectangle::CRectangle(int orgX, int orgY, int width, int height, COLORREF borderColor, int borderType, int borderWidth, COLORREF fillColor, int fillType)
+	: CShape(RECTANGLE, orgX, orgY, borderColor, borderType, borderWidth, fillColor, fillType), width(0), height(0)
+{
+}
+
+void CRectangle::Draw(CDC * pDC)
+{
+}
+
+bool CRectangle::IsMatched(CPoint pnt)
+{
+	return false;
+}
+
+void CRectangle::Serialize(CArchive & ar)
+{
+}
+#pragma endregion
+
+#pragma region CTriangle
+
+CTriangle::CTriangle() :CShape(TRIANGLE, 0, 0, 0, 0, 0, 0, 0)
+{
+}
+
+CTriangle::CTriangle(int orgX, int orgY, int width)
+	: CShape(TRIANGLE, orgX, orgY), width(0)
+{
+}
+
+CTriangle::CTriangle(int orgX, int orgY, int width, COLORREF borderColor, int borderType, int borderWidth, COLORREF fillColor, int fillType)
+	: CShape(TRIANGLE, orgX, orgY, borderColor, borderType, borderWidth, fillColor, fillType), width(width)
+{
+}
+
+void CTriangle::Draw(CDC * pDC)
+{
+}
+
+bool CTriangle::IsMatched(CPoint pnt)
+{
+	return false;
+}
+
+void CTriangle::Serialize(CArchive & ar)
+{
+}
+#pragma endregion
+
+#pragma region CText
+CText::CText()
+	: CShape(TEXT, 0, 0), text("String ×Ö·û´® 123"), height(0), angle(0)
+{
+}
+
+CText::CText(int orgX, int orgY, CString text, int height, int angle)
+	: CShape(TEXT, orgX, orgY), text(text), height(height), angle(angle)
+{
+}
+
+CText::CText(int orgX, int orgY, CString text, int height, int angle, COLORREF borderColor, int borderType, int borderWidth, COLORREF fillColor, int fillType)
+	: CShape(TEXT, orgX, orgY, borderColor, borderType, borderWidth, fillColor, fillType), text(text), height(height), angle(angle)
+{
+}
+
+void CText::Draw(CDC * pDC)
+{
+}
+
+bool CText::IsMatched(CPoint pnt)
+{
+	return false;
+}
+
+void CText::Serialize(CArchive & ar)
+{
+}
+
+#pragma endregion
+
+#pragma region CEllipse
+CEllipse::CEllipse()
+	: CShape(ELLIPSE, 0, 0), width(0), height(0)
+{
+}
+
+CEllipse::CEllipse(int orgX, int orgY, int width, int height)
+	: CShape(ELLIPSE, orgX, orgY), width(0), height(0)
+{
+}
+
+CEllipse::CEllipse(int orgX, int orgY, int width, int height, COLORREF borderColor, int borderType, int borderWidth, COLORREF fillColor, int fillType)
+	: CShape(ELLIPSE, orgX, orgY, borderColor, borderType, borderWidth, fillColor, fillType), width(0), height(0)
+{
+}
+
+void CEllipse::Draw(CDC * pDC)
+{
+}
+
+bool CEllipse::IsMatched(CPoint pnt)
+{
+	return false;
+}
+
+void CEllipse::Serialize(CArchive & ar)
+{
+}
+#pragma endregion
+
+#pragma endregion

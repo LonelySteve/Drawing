@@ -8,8 +8,8 @@ enum ElementType { NOTSET, SQUARE, RECTANGLE, CIRCLE, ELLIPSE, TRIANGLE, TEXT };
 class CShape : public CObject
 {
 public:
+	CShape(ElementType type, int orgX, int orgY);
 	CShape(ElementType type, int orgX, int orgY, COLORREF borderColor, int borderType, int borderWidth, COLORREF fillColor, int fillType);
-	~CShape();
 	virtual void Draw(CDC * pDC) = 0;
 	virtual bool IsMatched(CPoint pnt) = 0;
 
@@ -17,28 +17,114 @@ protected:
 	ElementType Type;
 	int OrgX;
 	int OrgY;
-	COLORREF BorderColor;
-	int BorderType;
-	int BorderWidth;
-	COLORREF FillColor;
-	int FillType;
+	COLORREF BorderColor = RGB(0, 0, 0);
+	int BorderType = 0;
+	int BorderWidth = 0;
+	COLORREF FillColor = RGB(0, 0, 0);
+	int FillType = 6;
 
 private:
 
 };
 
+/*正方形类*/
 class CSquare :public CShape
 {
 public:
 	CSquare();
 	CSquare(int orgX, int orgY, int width);
 	CSquare(int orgX, int orgY, int width, COLORREF borderColor, int borderType, int borderWidth, COLORREF fillColor, int fillType);
-	~CSquare();
-	void Draw(CDC * pDC);
-	bool IsMatched(CPoint pnt);
-	void Serialize(CArchive &ar);
+	virtual void Draw(CDC * pDC);
+	virtual bool IsMatched(CPoint pnt);
+	virtual void Serialize(CArchive &ar);
 private:
 	int width;
 	DECLARE_SERIAL(CSquare)
+};
+
+/*圆形*/
+class CCircle :public CShape
+{
+public:
+	CCircle();
+	CCircle(int orgX, int orgY, int radius);
+	CCircle(int orgX, int orgY, int radius, COLORREF borderColor, int borderType, int borderWidth, COLORREF fillColor, int fillType);
+
+	virtual void Draw(CDC * pDC);
+	virtual bool IsMatched(CPoint pnt);
+	virtual void Serialize(CArchive &ar);
+
+private:
+	int radius;
+};
+
+/*矩形*/
+class CRectangle :public CShape
+{
+public:
+	CRectangle();
+	CRectangle(int orgX, int orgY, int width, int height);
+	CRectangle(int orgX, int orgY, int width, int height, COLORREF borderColor, int borderType, int borderWidth, COLORREF fillColor, int fillType);
+
+	virtual void Draw(CDC * pDC);
+	virtual bool IsMatched(CPoint pnt);
+	virtual void Serialize(CArchive &ar);
+
+private:
+	int width;
+	int height;
+};
+
+/*三角形*/
+class CTriangle :public CShape
+{
+public:
+	CTriangle();
+	CTriangle(int orgX, int orgY, int width);
+	CTriangle(int orgX, int orgY, int width, COLORREF borderColor, int borderType, int borderWidth, COLORREF fillColor, int fillType);
+
+	virtual void Draw(CDC * pDC);
+	virtual bool IsMatched(CPoint pnt);
+	virtual void Serialize(CArchive &ar);
+
+private:
+	int width;
+};
+
+/*文本*/
+class CText :public CShape
+{
+public:
+	CText();
+	CText(int orgX, int orgY, CString text, int height, int angle);
+	CText(int orgX, int orgY, CString text, int height, int angle,COLORREF borderColor, int borderType, int borderWidth, COLORREF fillColor, int fillType);
+
+	virtual void Draw(CDC * pDC);
+	virtual bool IsMatched(CPoint pnt);
+	virtual void Serialize(CArchive &ar);
+
+private:
+	CString text;
+	int height;
+	int angle;
+};
+
+
+
+class CEllipse :public CShape
+{
+public:
+	CEllipse();
+	CEllipse(int orgX, int orgY, int width, int height);
+	CEllipse(int orgX, int orgY, int width, int height, COLORREF borderColor, int borderType, int borderWidth, COLORREF fillColor, int fillType);
+
+
+	virtual void Draw(CDC * pDC);
+	virtual bool IsMatched(CPoint pnt);
+	virtual void Serialize(CArchive &ar);
+
+private:
+	int width;
+	int height;
 };
 
