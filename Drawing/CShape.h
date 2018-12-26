@@ -110,7 +110,7 @@ private:
 };
 
 
-
+/*Õ÷‘≤*/
 class CEllipse :public CShape
 {
 public:
