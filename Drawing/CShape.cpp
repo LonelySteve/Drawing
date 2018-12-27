@@ -133,12 +133,12 @@ CRectangle::CRectangle()
 }
 
 CRectangle::CRectangle(int orgX, int orgY, int width, int height)
-	: CShape(RECTANGLE, orgX, orgY), width(0), height(0)
+	: CShape(RECTANGLE, orgX, orgY), width(width), height(height)
 {
 }
 
 CRectangle::CRectangle(int orgX, int orgY, int width, int height, COLORREF fillColor, int fillType, COLORREF borderColor, int borderWidth, int borderType)
-	: CShape(RECTANGLE, orgX, orgY, fillColor, fillType, borderColor, borderWidth, borderType), width(0), height(0)
+	: CShape(RECTANGLE, orgX, orgY, fillColor, fillType, borderColor, borderWidth, borderType), width(width), height(height)
 {
 }
 
@@ -162,7 +162,7 @@ CTriangle::CTriangle() :CShape(TRIANGLE, 0, 0, 0, 0, 0, 0, 0)
 }
 
 CTriangle::CTriangle(int orgX, int orgY, int width)
-	: CShape(TRIANGLE, orgX, orgY), width(0)
+	: CShape(TRIANGLE, orgX, orgY), width(width)
 {
 }
 
@@ -222,12 +222,12 @@ CEllipse::CEllipse()
 }
 
 CEllipse::CEllipse(int orgX, int orgY, int width, int height)
-	: CShape(ELLIPSE, orgX, orgY), width(0), height(0)
+	: CShape(ELLIPSE, orgX, orgY), width(width), height(height)
 {
 }
 
 CEllipse::CEllipse(int orgX, int orgY, int width, int height, COLORREF fillColor, int fillType, COLORREF borderColor, int borderWidth, int borderType)
-	: CShape(ELLIPSE, orgX, orgY, fillColor, fillType, borderColor, borderWidth, borderType), width(0), height(0)
+	: CShape(ELLIPSE, orgX, orgY, fillColor, fillType, borderColor, borderWidth, borderType), width(width), height(height)
 {
 }
 
