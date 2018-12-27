@@ -121,7 +121,7 @@ void CCircle::Serialize(CArchive & ar)
 
 void CCircle::ToDraw(CDC * pDC)
 {
-	pDC->Ellipse(OrgX - radius / 2, OrgY - radius / 2, OrgX + radius / 2, OrgY + radius / 2);
+	pDC->Ellipse(OrgX - radius, OrgY - radius, OrgX + radius, OrgY + radius);
 }
 
 #pragma endregion
