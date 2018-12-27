@@ -9,7 +9,7 @@ class CShape : public CObject
 {
 public:
 	CShape(ElementType type, int orgX, int orgY);
-	CShape(ElementType type, int orgX, int orgY, COLORREF borderColor, int borderType, int borderWidth, COLORREF fillColor, int fillType);
+	CShape(ElementType type, int orgX, int orgY, COLORREF fillColor, int fillType, COLORREF borderColor, int borderWidth, int borderType);
 	virtual void Draw(CDC * pDC) = 0;
 	virtual bool IsMatched(CPoint pnt) = 0;
 
@@ -33,7 +33,7 @@ class CSquare :public CShape
 public:
 	CSquare();
 	CSquare(int orgX, int orgY, int width);
-	CSquare(int orgX, int orgY, int width, COLORREF borderColor, int borderType, int borderWidth, COLORREF fillColor, int fillType);
+	CSquare(int orgX, int orgY, int width, COLORREF fillColor, int fillType, COLORREF borderColor, int borderWidth, int borderType);
 	virtual void Draw(CDC * pDC);
 	virtual bool IsMatched(CPoint pnt);
 	virtual void Serialize(CArchive &ar);
@@ -48,7 +48,7 @@ class CCircle :public CShape
 public:
 	CCircle();
 	CCircle(int orgX, int orgY, int radius);
-	CCircle(int orgX, int orgY, int radius, COLORREF borderColor, int borderType, int borderWidth, COLORREF fillColor, int fillType);
+	CCircle(int orgX, int orgY, int radius, COLORREF fillColor, int fillType, COLORREF borderColor, int borderWidth, int borderType);
 
 	virtual void Draw(CDC * pDC);
 	virtual bool IsMatched(CPoint pnt);
@@ -64,7 +64,7 @@ class CRectangle :public CShape
 public:
 	CRectangle();
 	CRectangle(int orgX, int orgY, int width, int height);
-	CRectangle(int orgX, int orgY, int width, int height, COLORREF borderColor, int borderType, int borderWidth, COLORREF fillColor, int fillType);
+	CRectangle(int orgX, int orgY, int width, int height, COLORREF fillColor, int fillType, COLORREF borderColor, int borderWidth, int borderType);
 
 	virtual void Draw(CDC * pDC);
 	virtual bool IsMatched(CPoint pnt);
@@ -81,7 +81,7 @@ class CTriangle :public CShape
 public:
 	CTriangle();
 	CTriangle(int orgX, int orgY, int width);
-	CTriangle(int orgX, int orgY, int width, COLORREF borderColor, int borderType, int borderWidth, COLORREF fillColor, int fillType);
+	CTriangle(int orgX, int orgY, int width, COLORREF fillColor, int fillType, COLORREF borderColor, int borderWidth, int borderType);
 
 	virtual void Draw(CDC * pDC);
 	virtual bool IsMatched(CPoint pnt);
@@ -97,7 +97,7 @@ class CText :public CShape
 public:
 	CText();
 	CText(int orgX, int orgY, CString text, int height, int angle);
-	CText(int orgX, int orgY, CString text, int height, int angle,COLORREF borderColor, int borderType, int borderWidth, COLORREF fillColor, int fillType);
+	CText(int orgX, int orgY, CString text, int height, int angle, COLORREF fillColor, int fillType, COLORREF borderColor, int borderWidth, int borderType);
 
 	virtual void Draw(CDC * pDC);
 	virtual bool IsMatched(CPoint pnt);
@@ -116,7 +116,7 @@ class CEllipse :public CShape
 public:
 	CEllipse();
 	CEllipse(int orgX, int orgY, int width, int height);
-	CEllipse(int orgX, int orgY, int width, int height, COLORREF borderColor, int borderType, int borderWidth, COLORREF fillColor, int fillType);
+	CEllipse(int orgX, int orgY, int width, int height, COLORREF fillColor, int fillType, COLORREF borderColor, int borderWidth, int borderType);
 
 
 	virtual void Draw(CDC * pDC);
