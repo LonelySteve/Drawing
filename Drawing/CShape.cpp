@@ -4,7 +4,11 @@
 
 
 IMPLEMENT_SERIAL(CSquare, CObject, 1)
-
+IMPLEMENT_SERIAL(CCircle, CObject, 1)
+IMPLEMENT_SERIAL(CRectangle, CObject, 1)
+IMPLEMENT_SERIAL(CTriangle, CObject, 1)
+IMPLEMENT_SERIAL(CText, CObject, 1)
+IMPLEMENT_SERIAL(CEllipse, CObject, 1)
 
 #pragma region CShape
 CShape::CShape(ElementType type, int orgX, int orgY)
@@ -32,6 +36,32 @@ void CShape::Draw(CDC * pDC)
 
 	pDC->SelectObject(pOldPen);
 	pDC->SelectObject(pOldBrush);
+}
+
+void CShape::Serialize(CArchive & ar)
+{
+	if (ar.IsStoring())
+	{
+		ar << (WORD)Type;   // 图元类型
+		ar << OrgX << OrgY; // 原点坐标
+		ar << BorderColor;  // 边界颜色
+		ar << BorderType;   // 边框类型
+		ar << BorderWidth;  // 边界宽度
+		ar << FillColor;    // 填充颜色
+		ar << FillType;     // 填充类型
+	}
+	else
+	{
+		WORD w;
+		ar >> w;
+		Type = (ElementType)w;
+		ar >> OrgX >> OrgY;
+		ar >> BorderColor;
+		ar >> BorderType;
+		ar >> BorderWidth;
+		ar >> FillColor;
+		ar >> FillType;
+	}
 }
 
 #pragma endregion
@@ -65,26 +95,13 @@ void CSquare::Serialize(CArchive & ar)
 {
 	if (ar.IsStoring())
 	{
-		ar << (WORD)Type;
-		ar << OrgX << OrgY;//原点坐标
-		ar << BorderColor;//边界颜色
-		ar << BorderType;
-		ar << BorderWidth;//边界宽度
-		ar << FillColor;//
-		ar << FillType;
+		ar << width;
 	}
 	else
 	{
-		WORD w;
-		ar >> w;
-		Type = (ElementType)w;
-		ar >> OrgX >> OrgY;//原点坐标
-		ar >> BorderColor;//边界颜色
-		ar >> BorderType;
-		ar >> BorderWidth;//边界宽度
-		ar >> FillColor;//
-		ar >> FillType;
+		ar >> width;
 	}
+	CShape::Serialize(ar);
 }
 
 void CSquare::ToDraw(CDC * pDC)
@@ -117,6 +134,15 @@ bool CCircle::IsMatched(CPoint pnt)
 
 void CCircle::Serialize(CArchive & ar)
 {
+	if (ar.IsStoring())
+	{
+		ar << radius;
+	}
+	else
+	{
+		ar >> radius;
+	}
+	CShape::Serialize(ar);
 }
 
 void CCircle::ToDraw(CDC * pDC)
@@ -150,6 +176,17 @@ bool CRectangle::IsMatched(CPoint pnt)
 
 void CRectangle::Serialize(CArchive & ar)
 {
+	if (ar.IsStoring())
+	{
+		ar << width;
+		ar << height;
+	}
+	else
+	{
+		ar >> width;
+		ar >> height;
+	}
+	CShape::Serialize(ar);
 }
 void CRectangle::ToDraw(CDC * pDC)
 {
@@ -180,6 +217,15 @@ bool CTriangle::IsMatched(CPoint pnt)
 
 void CTriangle::Serialize(CArchive & ar)
 {
+	if (ar.IsStoring())
+	{
+		ar << width;
+	}
+	else
+	{
+		ar >> width;
+	}
+	CShape::Serialize(ar);
 }
 void CTriangle::ToDraw(CDC * pDC)
 {
@@ -216,6 +262,19 @@ bool CText::IsMatched(CPoint pnt)
 
 void CText::Serialize(CArchive & ar)
 {
+	if (ar.IsStoring())
+	{
+		ar << text;
+		ar << height;
+		ar << angle;
+	}
+	else
+	{
+		ar >> text;
+		ar >> height;
+		ar >> angle;
+	}
+	CShape::Serialize(ar);
 }
 
 void CText::ToDraw(CDC * pDC)
@@ -267,6 +326,17 @@ bool CEllipse::IsMatched(CPoint pnt)
 
 void CEllipse::Serialize(CArchive & ar)
 {
+	if (ar.IsStoring())
+	{
+		ar << width;
+		ar << height;
+	}
+	else
+	{
+		ar >> width;
+		ar >> height;
+	}
+	CShape::Serialize(ar);
 }
 void CEllipse::ToDraw(CDC * pDC)
 {

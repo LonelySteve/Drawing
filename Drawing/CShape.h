@@ -25,6 +25,7 @@ protected:
 	int FillType = -1;
 
 	virtual void ToDraw(CDC *pDC) = 0;
+	virtual void Serialize(CArchive &ar);
 
 private:
 
@@ -65,6 +66,7 @@ protected:
 
 private:
 	int radius;
+	DECLARE_SERIAL(CCircle)
 };
 
 /*矩形*/
@@ -84,6 +86,7 @@ protected:
 private:
 	int width;
 	int height;
+	DECLARE_SERIAL(CRectangle)
 };
 
 /*三角形*/
@@ -102,6 +105,7 @@ protected:
 
 private:
 	int width;
+	DECLARE_SERIAL(CTriangle)
 };
 
 /*文本*/
@@ -122,6 +126,7 @@ private:
 	CString text;
 	int height;
 	int angle;
+	DECLARE_SERIAL(CText)
 };
 
 
@@ -142,5 +147,6 @@ protected:
 private:
 	int width;
 	int height;
+	DECLARE_SERIAL(CEllipse)
 };
 

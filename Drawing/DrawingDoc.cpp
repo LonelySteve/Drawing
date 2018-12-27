@@ -79,6 +79,7 @@ void CDrawingDoc::Serialize(CArchive& ar)
 	else
 	{
 		// TODO: 在此添加加载代码
+		m_Elements.Serialize(ar);
 	}
 }
 
