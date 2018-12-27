@@ -75,7 +75,6 @@ public:
 	CRectangle(int orgX, int orgY, int width, int height);
 	CRectangle(int orgX, int orgY, int width, int height, COLORREF fillColor, int fillType, COLORREF borderColor, int borderWidth, int borderType);
 
-	virtual void Draw(CDC * pDC);
 	virtual bool IsMatched(CPoint pnt);
 	virtual void Serialize(CArchive &ar);
 
