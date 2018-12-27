@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "CShape.h"
-
+#include <math.h>
 
 
 IMPLEMENT_SERIAL(CSquare, CObject, 1)
@@ -20,13 +20,13 @@ void CShape::Draw(CDC * pDC)
 {
 	CPen pen, *pOldPen;
 	pen.CreatePen(BorderType, BorderWidth, BorderColor);
-	pOldPen = (CPen*)pDC->SelectObject(&pen);
+	pOldPen = pDC->SelectObject(&pen);
 	CBrush brush, *pOldBrush;
 	if (FillType >= HS_HORIZONTAL && FillType <= HS_DIAGCROSS)
 		brush.CreateHatchBrush(FillType, FillColor);
 	else
 		brush.CreateSolidBrush(FillColor);
-	pOldBrush = (CBrush*)pDC->SelectObject(&brush);
+	pOldBrush = pDC->SelectObject(&brush);
 	// 调用具体的绘制函数
 	ToDraw(pDC);
 
@@ -121,6 +121,7 @@ void CCircle::Serialize(CArchive & ar)
 
 void CCircle::ToDraw(CDC * pDC)
 {
+	pDC->Ellipse(OrgX - radius / 2, OrgY - radius / 2, OrgX + radius / 2, OrgY + radius / 2);
 }
 
 #pragma endregion
@@ -152,6 +153,7 @@ void CRectangle::Serialize(CArchive & ar)
 }
 void CRectangle::ToDraw(CDC * pDC)
 {
+	pDC->Rectangle(OrgX - width / 2, OrgY - height / 2, OrgX + width / 2, OrgY + height / 2);
 }
 #pragma endregion
 
@@ -162,7 +164,7 @@ CTriangle::CTriangle() :CShape(TRIANGLE, 0, 0, 0, 0, 0, 0, 0)
 }
 
 CTriangle::CTriangle(int orgX, int orgY, int width)
-	: CShape(TRIANGLE, orgX, orgY), width(0)
+	: CShape(TRIANGLE, orgX, orgY), width(width)
 {
 }
 
@@ -181,6 +183,13 @@ void CTriangle::Serialize(CArchive & ar)
 }
 void CTriangle::ToDraw(CDC * pDC)
 {
+	POINT ps[3]{
+		POINT{OrgX - width / 2, long(OrgY + width / (2 * sqrt(3)))},
+		POINT{OrgX + width / 2,long(OrgY + width / (2 * sqrt(3)))},
+		POINT{OrgX,long(OrgY - width / sqrt(3))}
+	};
+
+	pDC->Polygon(ps, 3);
 }
 #pragma endregion
 
@@ -211,6 +220,26 @@ void CText::Serialize(CArchive & ar)
 
 void CText::ToDraw(CDC * pDC)
 {
+	CFont *OldFont, *F = new CFont;
+	F->CreateFontW(
+		height,
+		0,
+		angle * 10,
+		0,
+		FW_NORMAL,
+		FALSE,
+		FALSE,
+		FALSE,
+		GB2312_CHARSET,
+		OUT_DEFAULT_PRECIS,
+		CLIP_DEFAULT_PRECIS,
+		DEFAULT_QUALITY,
+		DEFAULT_PITCH | FF_SWISS,
+		_T("微软雅黑"));
+	OldFont = pDC->SelectObject(F);
+	pDC->TextOutW(OrgX, OrgY, text);
+	pDC->SelectObject(OldFont);
+	delete F;
 }
 
 #pragma endregion
@@ -222,7 +251,7 @@ CEllipse::CEllipse()
 }
 
 CEllipse::CEllipse(int orgX, int orgY, int width, int height)
-	: CShape(ELLIPSE, orgX, orgY), width(0), height(0)
+	: CShape(ELLIPSE, orgX, orgY), width(width), height(height)
 {
 }
 
@@ -241,6 +270,7 @@ void CEllipse::Serialize(CArchive & ar)
 }
 void CEllipse::ToDraw(CDC * pDC)
 {
+	pDC->Ellipse(OrgX - width / 2, OrgY - height / 2, OrgX + width / 2, OrgY + height / 2);
 }
 #pragma endregion
 
