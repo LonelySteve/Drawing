@@ -21,7 +21,7 @@ protected:
 	int BorderType = 0;
 	int BorderWidth = 0;
 	COLORREF FillColor = RGB(0, 0, 0);
-	int FillType = 6;
+	int FillType = -1;
 
 private:
 
