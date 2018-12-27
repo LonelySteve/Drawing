@@ -10,7 +10,8 @@ class CShape : public CObject
 public:
 	CShape(ElementType type, int orgX, int orgY);
 	CShape(ElementType type, int orgX, int orgY, COLORREF fillColor, int fillType, COLORREF borderColor, int borderWidth, int borderType);
-	virtual void Draw(CDC * pDC) = 0;
+
+	virtual void Draw(CDC * pDC);
 	virtual bool IsMatched(CPoint pnt) = 0;
 
 protected:
@@ -23,6 +24,8 @@ protected:
 	COLORREF FillColor = RGB(0, 0, 0);
 	int FillType = -1;
 
+	virtual void ToDraw(CDC *pDC) = 0;
+
 private:
 
 };
@@ -34,9 +37,13 @@ public:
 	CSquare();
 	CSquare(int orgX, int orgY, int width);
 	CSquare(int orgX, int orgY, int width, COLORREF fillColor, int fillType, COLORREF borderColor, int borderWidth, int borderType);
-	virtual void Draw(CDC * pDC);
+
 	virtual bool IsMatched(CPoint pnt);
 	virtual void Serialize(CArchive &ar);
+
+protected:
+	virtual void ToDraw(CDC* pDC);
+
 private:
 	int width;
 	DECLARE_SERIAL(CSquare)
@@ -50,9 +57,11 @@ public:
 	CCircle(int orgX, int orgY, int radius);
 	CCircle(int orgX, int orgY, int radius, COLORREF fillColor, int fillType, COLORREF borderColor, int borderWidth, int borderType);
 
-	virtual void Draw(CDC * pDC);
 	virtual bool IsMatched(CPoint pnt);
 	virtual void Serialize(CArchive &ar);
+
+protected:
+	virtual void ToDraw(CDC* pDC);
 
 private:
 	int radius;
@@ -70,6 +79,9 @@ public:
 	virtual bool IsMatched(CPoint pnt);
 	virtual void Serialize(CArchive &ar);
 
+protected:
+	virtual void ToDraw(CDC* pDC);
+
 private:
 	int width;
 	int height;
@@ -83,9 +95,11 @@ public:
 	CTriangle(int orgX, int orgY, int width);
 	CTriangle(int orgX, int orgY, int width, COLORREF fillColor, int fillType, COLORREF borderColor, int borderWidth, int borderType);
 
-	virtual void Draw(CDC * pDC);
 	virtual bool IsMatched(CPoint pnt);
 	virtual void Serialize(CArchive &ar);
+
+protected:
+	virtual void ToDraw(CDC* pDC);
 
 private:
 	int width;
@@ -99,9 +113,11 @@ public:
 	CText(int orgX, int orgY, CString text, int height, int angle);
 	CText(int orgX, int orgY, CString text, int height, int angle, COLORREF fillColor, int fillType, COLORREF borderColor, int borderWidth, int borderType);
 
-	virtual void Draw(CDC * pDC);
 	virtual bool IsMatched(CPoint pnt);
 	virtual void Serialize(CArchive &ar);
+
+protected:
+	virtual void ToDraw(CDC* pDC);
 
 private:
 	CString text;
@@ -118,10 +134,11 @@ public:
 	CEllipse(int orgX, int orgY, int width, int height);
 	CEllipse(int orgX, int orgY, int width, int height, COLORREF fillColor, int fillType, COLORREF borderColor, int borderWidth, int borderType);
 
-
-	virtual void Draw(CDC * pDC);
 	virtual bool IsMatched(CPoint pnt);
 	virtual void Serialize(CArchive &ar);
+
+protected:
+	virtual void ToDraw(CDC* pDC);
 
 private:
 	int width;

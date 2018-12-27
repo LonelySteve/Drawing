@@ -16,6 +16,24 @@ CShape::CShape(ElementType type, int orgX, int orgY, COLORREF fillColor, int fil
 {
 }
 
+void CShape::Draw(CDC * pDC)
+{
+	CPen pen, *pOldPen;
+	pen.CreatePen(BorderType, BorderWidth, BorderColor);
+	pOldPen = (CPen*)pDC->SelectObject(&pen);
+	CBrush brush, *pOldBrush;
+	if (FillType >= HS_HORIZONTAL && FillType <= HS_DIAGCROSS)
+		brush.CreateHatchBrush(FillType, FillColor);
+	else
+		brush.CreateSolidBrush(FillColor);
+	pOldBrush = (CBrush*)pDC->SelectObject(&brush);
+	// 调用具体的绘制函数
+	ToDraw(pDC);
+
+	pDC->SelectObject(pOldPen);
+	pDC->SelectObject(pOldBrush);
+}
+
 #pragma endregion
 
 
@@ -35,25 +53,6 @@ CSquare::CSquare(int orgX, int orgY, int width)
 CSquare::CSquare(int orgX, int orgY, int width, COLORREF fillColor, int fillType, COLORREF borderColor, int borderWidth, int borderType)
 	: CShape(SQUARE, orgX, orgY, fillColor, fillType, borderColor, borderWidth, borderType), width(width)
 {
-
-}
-
-void CSquare::Draw(CDC * pDC)
-{
-	CPen pen, *pOldPen;
-	pen.CreatePen(BorderType, BorderWidth, BorderColor);
-	pOldPen = (CPen*)pDC->SelectObject(&pen);
-	CBrush brush, *pOldBrush;
-	if (FillType >= HS_HORIZONTAL && FillType <= HS_DIAGCROSS)
-		brush.CreateHatchBrush(FillType, FillColor);
-	else
-		brush.CreateSolidBrush(FillColor);
-	pOldBrush = (CBrush*)pDC->SelectObject(&brush);
-
-	pDC->Rectangle(OrgX - width / 2, OrgY - width / 2, OrgX + width / 2, OrgY + width / 2);
-
-	pDC->SelectObject(pOldPen);
-	pDC->SelectObject(pOldBrush);
 
 }
 
@@ -88,6 +87,11 @@ void CSquare::Serialize(CArchive & ar)
 	}
 }
 
+void CSquare::ToDraw(CDC * pDC)
+{
+	pDC->Rectangle(OrgX - width / 2, OrgY - width / 2, OrgX + width / 2, OrgY + width / 2);
+}
+
 #pragma endregion
 
 #pragma region CCircle
@@ -106,16 +110,16 @@ CCircle::CCircle(int orgX, int orgY, int radius, COLORREF fillColor, int fillTyp
 {
 }
 
-void CCircle::Draw(CDC * pDC)
-{
-}
-
 bool CCircle::IsMatched(CPoint pnt)
 {
 	return false;
 }
 
 void CCircle::Serialize(CArchive & ar)
+{
+}
+
+void CCircle::ToDraw(CDC * pDC)
 {
 }
 
@@ -138,16 +142,15 @@ CRectangle::CRectangle(int orgX, int orgY, int width, int height, COLORREF fillC
 {
 }
 
-void CRectangle::Draw(CDC * pDC)
-{
-}
-
 bool CRectangle::IsMatched(CPoint pnt)
 {
 	return false;
 }
 
 void CRectangle::Serialize(CArchive & ar)
+{
+}
+void CRectangle::ToDraw(CDC * pDC)
 {
 }
 #pragma endregion
@@ -168,16 +171,15 @@ CTriangle::CTriangle(int orgX, int orgY, int width, COLORREF fillColor, int fill
 {
 }
 
-void CTriangle::Draw(CDC * pDC)
-{
-}
-
 bool CTriangle::IsMatched(CPoint pnt)
 {
 	return false;
 }
 
 void CTriangle::Serialize(CArchive & ar)
+{
+}
+void CTriangle::ToDraw(CDC * pDC)
 {
 }
 #pragma endregion
@@ -198,16 +200,16 @@ CText::CText(int orgX, int orgY, CString text, int height, int angle, COLORREF f
 {
 }
 
-void CText::Draw(CDC * pDC)
-{
-}
-
 bool CText::IsMatched(CPoint pnt)
 {
 	return false;
 }
 
 void CText::Serialize(CArchive & ar)
+{
+}
+
+void CText::ToDraw(CDC * pDC)
 {
 }
 
@@ -229,16 +231,15 @@ CEllipse::CEllipse(int orgX, int orgY, int width, int height, COLORREF fillColor
 {
 }
 
-void CEllipse::Draw(CDC * pDC)
-{
-}
-
 bool CEllipse::IsMatched(CPoint pnt)
 {
 	return false;
 }
 
 void CEllipse::Serialize(CArchive & ar)
+{
+}
+void CEllipse::ToDraw(CDC * pDC)
 {
 }
 #pragma endregion
