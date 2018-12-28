@@ -51,6 +51,7 @@ BOOL CShapeDlg::OnInitDialog()
 
 	// TODO:  在此添加额外的初始化
 	// 初始化 m_comboBox_shapeType
+	// 选中第一项
 	m_comboBox_shapeType.SetCurSel(0);
 	// 初始化 m_listBox_penType
 	m_listBox_penType.AddString(_T("PS_SOLID"));
@@ -60,8 +61,9 @@ BOOL CShapeDlg::OnInitDialog()
 	m_listBox_penType.AddString(_T("PS_DASHDOTDOT"));
 	m_listBox_penType.AddString(_T("PS_NULL"));
 	m_listBox_penType.AddString(_T("PS_INSIDEFRAME"));
+	// 选中第一项
 	m_listBox_penType.SetCurSel(0);
-	// 初始化
+	// 初始化 m_listBox_brushType
 	m_listBox_brushType.AddString(_T("HS_HORIZONTAL"));
 	m_listBox_brushType.AddString(_T("HS_VERTICAL"));
 	m_listBox_brushType.AddString(_T("HS_FDIAGONAL"));
@@ -69,7 +71,18 @@ BOOL CShapeDlg::OnInitDialog()
 	m_listBox_brushType.AddString(_T("HS_CROSS"));
 	m_listBox_brushType.AddString(_T("HS_DIAGCROSS"));
 	m_listBox_brushType.AddString(_T("HS_SOLID"));
+	// 选中第一项
 	m_listBox_brushType.SetCurSel(0);
+	// 初始化 m_edit_orgX
+	m_edit_orgX.SetWindowTextW(_T("0"));
+	// 初始化 m_edit_orgY
+	m_edit_orgY.SetWindowTextW(_T("0"));
+	// 初始化 m_edit_widthRadiusAngle
+	m_edit_widthRadiusAngle.SetWindowTextW(_T("0"));
+	// 初始化 m_edit_penWidth
+	m_edit_penWidth.SetWindowTextW(_T("0"));
+	// 初始化 m_edit_height
+	m_edit_height.SetWindowTextW(_T("0"));
 
 	return TRUE;  // return TRUE unless you set the focus to a control
 				  // 异常: OCX 属性页应返回 FALSE
