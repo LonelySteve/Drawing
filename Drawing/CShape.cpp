@@ -88,7 +88,14 @@ CSquare::CSquare(int orgX, int orgY, int width, COLORREF fillColor, int fillType
 
 bool CSquare::IsMatched(CPoint pnt)
 {
-	return false;
+	// X 轴方向的绝对偏移量计算
+	long abs_offsetX = abs(pnt.x - OrgX);
+	// Y 轴方向的绝对偏移量计算
+	long abs_offsetY = abs(pnt.y - OrgY);
+
+	double half_of_width = width / 2.0;
+
+	return abs_offsetX <= half_of_width && abs_offsetY <= half_of_width;
 }
 
 void CSquare::Serialize(CArchive & ar)
@@ -129,7 +136,9 @@ CCircle::CCircle(int orgX, int orgY, int radius, COLORREF fillColor, int fillTyp
 
 bool CCircle::IsMatched(CPoint pnt)
 {
-	return false;
+	// 计算点到原点的距离
+	double dist = sqrt(pow(pnt.x - OrgX, 2) + pow(pnt.y - OrgY, 2));
+	return dist <= radius;
 }
 
 void CCircle::Serialize(CArchive & ar)
@@ -171,7 +180,15 @@ CRectangle::CRectangle(int orgX, int orgY, int width, int height, COLORREF fillC
 
 bool CRectangle::IsMatched(CPoint pnt)
 {
-	return false;
+	// X 轴方向的绝对偏移量计算
+	long abs_offsetX = abs(pnt.x - OrgX);
+	// Y 轴方向的绝对偏移量计算
+	long abs_offsetY = abs(pnt.y - OrgY);
+
+	double half_of_width = width / 2.0;
+	double half_of_height = height / 2.0;
+
+	return abs_offsetX <= half_of_width && abs_offsetY <= half_of_height;
 }
 
 void CRectangle::Serialize(CArchive & ar)
@@ -212,7 +229,16 @@ CTriangle::CTriangle(int orgX, int orgY, int width, COLORREF fillColor, int fill
 
 bool CTriangle::IsMatched(CPoint pnt)
 {
-	return false;
+	// 这其实就是个线性规划问题...
+	double sqrt_3 = sqrt(3);
+
+	double b1 = OrgY - width / sqrt_3 + OrgX * sqrt_3;
+	double b2 = OrgY - OrgX * sqrt_3 - sqrt_3 * width / 3;
+
+	return pnt.y >= -sqrt_3 * pnt.x + b1
+		&& pnt.y >= sqrt_3 * pnt.x + b2
+		&& pnt.y <= OrgY + sqrt_3 * width / 6;
+
 }
 
 void CTriangle::Serialize(CArchive & ar)
@@ -296,6 +322,8 @@ void CText::ToDraw(CDC * pDC)
 		DEFAULT_PITCH | FF_SWISS,
 		_T("微软雅黑"));
 	OldFont = pDC->SelectObject(F);
+	size = pDC->GetTextExtent(text);
+
 	pDC->TextOutW(OrgX, OrgY, text);
 	pDC->SelectObject(OldFont);
 	delete F;
@@ -321,7 +349,11 @@ CEllipse::CEllipse(int orgX, int orgY, int width, int height, COLORREF fillColor
 
 bool CEllipse::IsMatched(CPoint pnt)
 {
-	return false;
+	return
+		pow(pnt.x - OrgX, 2) / pow(width / 2, 2)
+		+
+		pow(pnt.y - OrgY, 2) / pow(height / 2, 2)
+		<= 1;
 }
 
 void CEllipse::Serialize(CArchive & ar)
