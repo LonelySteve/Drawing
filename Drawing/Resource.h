@@ -17,6 +17,7 @@
 #define IDR_DrawingTYPE                 130
 #define IDS_EDIT_MENU                   306
 #define IDD_DIALOG1                     310
+#define IDD_CSHAPE_DLG                  310
 #define IDC_COMBO1                      1000
 #define IDC_LIST1                       1001
 #define IDC_EDIT1                       1002
