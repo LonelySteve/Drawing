@@ -322,7 +322,6 @@ void CText::ToDraw(CDC * pDC)
 		DEFAULT_PITCH | FF_SWISS,
 		_T("Î¢ÈíÑÅºÚ"));
 	OldFont = pDC->SelectObject(F);
-	size = pDC->GetTextExtent(text);
 
 	pDC->TextOutW(OrgX, OrgY, text);
 	pDC->SelectObject(OldFont);
