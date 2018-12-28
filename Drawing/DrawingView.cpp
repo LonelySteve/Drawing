@@ -21,6 +21,8 @@
 // CDrawingView
 #include "CShape.h"
 
+#include "CShapeDlg.h"
+
 IMPLEMENT_DYNCREATE(CDrawingView, CScrollView)
 
 BEGIN_MESSAGE_MAP(CDrawingView, CScrollView)
@@ -28,10 +30,10 @@ BEGIN_MESSAGE_MAP(CDrawingView, CScrollView)
 	ON_COMMAND(ID_FILE_PRINT, &CScrollView::OnFilePrint)
 	ON_COMMAND(ID_FILE_PRINT_DIRECT, &CScrollView::OnFilePrint)
 	ON_COMMAND(ID_FILE_PRINT_PREVIEW, &CDrawingView::OnFilePrintPreview)
-	ON_WM_CONTEXTMENU()
 	ON_WM_RBUTTONUP()
 	ON_WM_LBUTTONDOWN()
 	ON_WM_LBUTTONDBLCLK()
+	ON_WM_RBUTTONDBLCLK()
 END_MESSAGE_MAP()
 
 // CDrawingView 构造/析构
@@ -115,12 +117,6 @@ void CDrawingView::OnRButtonUp(UINT /* nFlags */, CPoint point)
 	OnContextMenu(this, point);
 }
 
-void CDrawingView::OnContextMenu(CWnd* /* pWnd */, CPoint point)
-{
-#ifndef SHARED_HANDLERS
-	theApp.GetContextMenuManager()->ShowPopupMenu(IDR_POPUP_EDIT, point.x, point.y, this, TRUE);
-#endif
-}
 
 void CDrawingView::OnLButtonDown(UINT nFlags, CPoint point)
 {
@@ -198,4 +194,13 @@ void CDrawingView::OnLButtonDblClk(UINT nFlags, CPoint point)
 		}
 	}
 	CScrollView::OnLButtonDblClk(nFlags, point);
+}
+
+
+void CDrawingView::OnRButtonDblClk(UINT nFlags, CPoint point)
+{
+	// TODO: 在此添加消息处理程序代码和/或调用默认值
+	CShapeDlg dlg;
+	dlg.DoModal();
+	CScrollView::OnRButtonDblClk(nFlags, point);
 }

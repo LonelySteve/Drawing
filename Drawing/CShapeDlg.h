@@ -45,4 +45,6 @@ protected:
 	CButton m_btn_brushColor;
 public:
 	virtual BOOL OnInitDialog();
+	afx_msg void OnActivate(UINT nState, CWnd* pWndOther, BOOL bMinimized);
+	afx_msg HBRUSH OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor);
 };

@@ -11,8 +11,14 @@ public:
 	CShape(ElementType type, int orgX, int orgY);
 	CShape(ElementType type, int orgX, int orgY, COLORREF fillColor, int fillType, COLORREF borderColor, int borderWidth, int borderType);
 
-	virtual void Draw(CDC * pDC);
+	void SetPen(COLORREF color, int width, int type);
+	bool GetPen(CPen &pen);
+	void SetBrush(COLORREF color, int type);
+	bool GetBrush(CBrush &brush);
+	virtual void Draw(CDC *pDC);
 	virtual bool IsMatched(CPoint pnt) = 0;
+	virtual void SetShapeValue(ElementType type, int orgX, int orgY);
+	virtual void GetShapeValue(ElementType &type, int &orgX, int &orgY);
 
 protected:
 	ElementType Type;
@@ -41,6 +47,8 @@ public:
 
 	virtual bool IsMatched(CPoint pnt);
 	virtual void Serialize(CArchive &ar);
+	virtual void SetShapeValue(ElementType type, int orgX, int orgY, int width);
+	virtual void GetShapeValue(ElementType &type, int &orgX, int &orgY, int &width);
 
 protected:
 	virtual void ToDraw(CDC* pDC);
@@ -60,6 +68,8 @@ public:
 
 	virtual bool IsMatched(CPoint pnt);
 	virtual void Serialize(CArchive &ar);
+	virtual void SetShapeValue(ElementType type, int orgX, int orgY, int radius);
+	virtual void GetShapeValue(ElementType &type, int &orgX, int &orgY, int &radius);
 
 protected:
 	virtual void ToDraw(CDC* pDC);
@@ -79,6 +89,8 @@ public:
 
 	virtual bool IsMatched(CPoint pnt);
 	virtual void Serialize(CArchive &ar);
+	virtual void SetShapeValue(ElementType type, int orgX, int orgY, int width, int height);
+	virtual void GetShapeValue(ElementType &type, int &orgX, int &orgY, int &width, int &height);
 
 protected:
 	virtual void ToDraw(CDC* pDC);
@@ -99,6 +111,8 @@ public:
 
 	virtual bool IsMatched(CPoint pnt);
 	virtual void Serialize(CArchive &ar);
+	virtual void SetShapeValue(ElementType type, int orgX, int orgY, int width);
+	virtual void GetShapeValue(ElementType &type, int &orgX, int &orgY, int &width);
 
 protected:
 	virtual void ToDraw(CDC* pDC);
@@ -118,6 +132,8 @@ public:
 
 	virtual bool IsMatched(CPoint pnt);
 	virtual void Serialize(CArchive &ar);
+	virtual void SetShapeValue(ElementType type, int orgX, int orgY, CString text, int height, int angle);
+	virtual void GetShapeValue(ElementType &type, int &orgX, int &orgY, CString &text, int &height, int &angle);
 
 protected:
 	virtual void ToDraw(CDC* pDC);
@@ -140,6 +156,8 @@ public:
 
 	virtual bool IsMatched(CPoint pnt);
 	virtual void Serialize(CArchive &ar);
+	virtual void SetShapeValue(ElementType type, int orgX, int orgY, int width, int height);
+	virtual void GetShapeValue(ElementType &type, int &orgX, int &orgY, int &width, int &height);
 
 protected:
 	virtual void ToDraw(CDC* pDC);

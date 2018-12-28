@@ -20,22 +20,57 @@ CShape::CShape(ElementType type, int orgX, int orgY, COLORREF fillColor, int fil
 {
 }
 
+void CShape::SetPen(COLORREF color, int width, int type)
+{
+	BorderColor = color;
+	BorderWidth = width;
+	BorderType = type;
+}
+
+bool CShape::GetPen(CPen & pen)
+{
+	return pen.CreatePen(BorderType, BorderWidth, BorderColor);
+}
+
+void CShape::SetBrush(COLORREF color, int type)
+{
+	FillColor = color;
+	FillType = type;
+}
+
+bool CShape::GetBrush(CBrush & brush)
+{
+	return FillType >= HS_HORIZONTAL && FillType <= HS_DIAGCROSS ?
+		brush.CreateHatchBrush(FillType, FillColor) : brush.CreateSolidBrush(FillColor);
+}
+
 void CShape::Draw(CDC * pDC)
 {
 	CPen pen, *pOldPen;
-	pen.CreatePen(BorderType, BorderWidth, BorderColor);
+	GetPen(pen);
 	pOldPen = pDC->SelectObject(&pen);
 	CBrush brush, *pOldBrush;
-	if (FillType >= HS_HORIZONTAL && FillType <= HS_DIAGCROSS)
-		brush.CreateHatchBrush(FillType, FillColor);
-	else
-		brush.CreateSolidBrush(FillColor);
+	GetBrush(brush);
 	pOldBrush = pDC->SelectObject(&brush);
 	// 调用具体的绘制函数
 	ToDraw(pDC);
 
 	pDC->SelectObject(pOldPen);
 	pDC->SelectObject(pOldBrush);
+}
+
+void CShape::SetShapeValue(ElementType type, int orgX, int orgY)
+{
+	Type = type;
+	OrgX = orgX;
+	OrgY = orgY;
+}
+
+void CShape::GetShapeValue(ElementType & type, int & orgX, int & orgY)
+{
+	type = Type;
+	orgX = OrgX;
+	orgY = OrgY;
 }
 
 void CShape::Serialize(CArchive & ar)
@@ -111,6 +146,18 @@ void CSquare::Serialize(CArchive & ar)
 	CShape::Serialize(ar);
 }
 
+void CSquare::SetShapeValue(ElementType type, int orgX, int orgY, int width)
+{
+	CShape::SetShapeValue(type, orgX, orgY);
+	this->width = width;
+}
+
+void CSquare::GetShapeValue(ElementType & type, int & orgX, int & orgY, int &width)
+{
+	CShape::GetShapeValue(type, orgX, orgY);
+	width = this->width;
+}
+
 void CSquare::ToDraw(CDC * pDC)
 {
 	pDC->Rectangle(OrgX - width / 2, OrgY - width / 2, OrgX + width / 2, OrgY + width / 2);
@@ -152,6 +199,18 @@ void CCircle::Serialize(CArchive & ar)
 		ar >> radius;
 	}
 	CShape::Serialize(ar);
+}
+
+void CCircle::SetShapeValue(ElementType type, int orgX, int orgY, int radius)
+{
+	CShape::SetShapeValue(type, orgX, orgY);
+	this->radius = radius;
+}
+
+void CCircle::GetShapeValue(ElementType & type, int & orgX, int & orgY, int & radius)
+{
+	CShape::GetShapeValue(type, orgX, orgY);
+	radius = this->radius;
 }
 
 void CCircle::ToDraw(CDC * pDC)
@@ -205,6 +264,18 @@ void CRectangle::Serialize(CArchive & ar)
 	}
 	CShape::Serialize(ar);
 }
+void CRectangle::SetShapeValue(ElementType type, int orgX, int orgY, int width, int height)
+{
+	CShape::SetShapeValue(type, orgX, orgY);
+	this->width = width;
+	this->height = height;
+}
+void CRectangle::GetShapeValue(ElementType & type, int & orgX, int & orgY, int & width, int & height)
+{
+	CShape::GetShapeValue(type, orgX, orgY);
+	width = this->width;
+	height = this->height;
+}
 void CRectangle::ToDraw(CDC * pDC)
 {
 	pDC->Rectangle(OrgX - width / 2, OrgY - height / 2, OrgX + width / 2, OrgY + height / 2);
@@ -252,6 +323,16 @@ void CTriangle::Serialize(CArchive & ar)
 		ar >> width;
 	}
 	CShape::Serialize(ar);
+}
+void CTriangle::SetShapeValue(ElementType type, int orgX, int orgY, int width)
+{
+	CShape::SetShapeValue(type, orgX, orgY);
+	this->width = width;
+}
+void CTriangle::GetShapeValue(ElementType & type, int & orgX, int & orgY, int & width)
+{
+	CShape::GetShapeValue(type, orgX, orgY);
+	width = this->width;
 }
 void CTriangle::ToDraw(CDC * pDC)
 {
@@ -301,6 +382,22 @@ void CText::Serialize(CArchive & ar)
 		ar >> angle;
 	}
 	CShape::Serialize(ar);
+}
+
+void CText::SetShapeValue(ElementType type, int orgX, int orgY, CString text, int height, int angle)
+{
+	CShape::SetShapeValue(type, orgX, orgY);
+	this->text = text;
+	this->height = height;
+	this->angle = angle;
+}
+
+void CText::GetShapeValue(ElementType & type, int & orgX, int & orgY, CString & text, int & height, int & angle)
+{
+	CShape::GetShapeValue(type, orgX, orgY);
+	text = this->text;
+	height = this->height;
+	angle = this->angle;
 }
 
 void CText::ToDraw(CDC * pDC)
@@ -368,6 +465,18 @@ void CEllipse::Serialize(CArchive & ar)
 		ar >> height;
 	}
 	CShape::Serialize(ar);
+}
+void CEllipse::SetShapeValue(ElementType type, int orgX, int orgY, int width, int height)
+{
+	CShape::SetShapeValue(type, orgX, orgY);
+	this->width = width;
+	this->height = height;
+}
+void CEllipse::GetShapeValue(ElementType & type, int & orgX, int & orgY, int & width, int & height)
+{
+	CShape::GetShapeValue(type, orgX, orgY);
+	width = this->width;
+	height = this->height;
 }
 void CEllipse::ToDraw(CDC * pDC)
 {
