@@ -31,6 +31,7 @@ BEGIN_MESSAGE_MAP(CDrawingView, CScrollView)
 	ON_WM_CONTEXTMENU()
 	ON_WM_RBUTTONUP()
 	ON_WM_LBUTTONDOWN()
+	ON_WM_LBUTTONDBLCLK()
 END_MESSAGE_MAP()
 
 // CDrawingView 构造/析构
@@ -169,3 +170,32 @@ CDrawingDoc* CDrawingView::GetDocument() const // 非调试版本是内联的
 
 
 // CDrawingView 消息处理程序
+
+
+void CDrawingView::OnLButtonDblClk(UINT nFlags, CPoint point)
+{
+	// TODO: 在此添加消息处理程序代码和/或调用默认值
+		// TODO: 在此添加消息处理程序代码和/或调用默认值
+	CDrawingDoc* pDoc = GetDocument();
+	ASSERT_VALID(pDoc);
+	if (!pDoc)	return;
+
+	CClientDC dc(this);
+	CPoint pntLogical = point;
+	OnPrepareDC(&dc);
+	dc.DPtoLP(&pntLogical);//DP->LP进行转换
+
+	for (int i = pDoc->m_Elements.GetCount() - 1; i >= 0; i--)
+	{
+		if (((CShape*)pDoc->m_Elements[i])->IsMatched(pntLogical))
+		{
+			delete pDoc->m_Elements[i];
+			pDoc->m_Elements.RemoveAt(i);
+			pDoc->SetModifiedFlag();
+			pDoc->UpdateAllViews(NULL);
+			CScrollView::OnLButtonDblClk(nFlags, point);
+			return;
+		}
+	}
+	CScrollView::OnLButtonDblClk(nFlags, point);
+}
