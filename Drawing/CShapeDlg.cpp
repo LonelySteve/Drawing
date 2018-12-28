@@ -29,7 +29,7 @@ void CShapeDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_EDIT4, m_edit_orgY);
 	DDX_Control(pDX, IDC_EDIT3, m_edit_widthRadiusAngle);
 	DDX_Control(pDX, IDC_EDIT5, m_edit_height);
-	DDX_Control(pDX, IDC_EDIT6, edit_text);
+	DDX_Control(pDX, IDC_EDIT6, m_edit_text);
 	DDX_Control(pDX, IDC_EDIT1, m_edit_penWidth);
 	DDX_Control(pDX, IDC_LIST1, m_listBox_penType);
 	DDX_Control(pDX, IDC_BUTTON1, m_btn_pen_color);
@@ -61,7 +61,7 @@ BOOL CShapeDlg::OnInitDialog()
 	m_listBox_penType.AddString(_T("PS_NULL"));
 	m_listBox_penType.AddString(_T("PS_INSIDEFRAME"));
 	m_listBox_penType.SetCurSel(0);
-	// 初始化 
+	// 初始化
 	m_listBox_brushType.AddString(_T("HS_HORIZONTAL"));
 	m_listBox_brushType.AddString(_T("HS_VERTICAL"));
 	m_listBox_brushType.AddString(_T("HS_FDIAGONAL"));

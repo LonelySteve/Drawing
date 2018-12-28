@@ -32,7 +32,7 @@ protected:
 	// 高度的编辑框
 	CEdit m_edit_height;
 	// 文字的编辑框
-	CEdit edit_text;
+	CEdit m_edit_text;
 	// 线宽的编辑框
 	CEdit m_edit_penWidth;
 	// 线型的ListBox
