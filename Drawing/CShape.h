@@ -2,7 +2,7 @@
 #include<afx.h>
 #include<afxwin.h>
 
-enum ElementType { NOTSET, SQUARE, RECTANGLE, CIRCLE, ELLIPSE, TRIANGLE, TEXT };
+enum ElementType { SQUARE, RECTANGLE, CIRCLE, ELLIPSE, TRIANGLE, TEXT };
 
 /*抽象类 CShape*/
 class CShape : public CObject
@@ -34,12 +34,6 @@ protected:
 
 	virtual void ToDraw(CDC *pDC) = 0;
 	virtual void Serialize(CArchive &ar);
-};
-
-/*未知图元类*/
-class CNotSet :public CShape
-{
-
 };
 
 /*正方形类*/
