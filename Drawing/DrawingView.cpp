@@ -131,13 +131,15 @@ void CDrawingView::OnLButtonDown(UINT nFlags, CPoint point)
 		CPoint pntLogical = point;
 		OnPrepareDC(&dc);
 		dc.DPtoLP(&pntLogical);//DP->LP进行转换
-
-		// ----- 测试代码 begin -----
-		CShape * p = new CSquare(pntLogical.x, pntLogical.y, 100);
-		pDoc->m_Elements.Add(p);
+		// 动态分配内存
+		CSquare defSquare(pntLogical.x, pntLogical.y, 100);
+		CShapeDlg dlg(defSquare);
+		if (dlg.DoModal() == IDOK)
+		{
+			pDoc->m_Elements.Add(dlg.GetShapeValueFromDlg());
+		}
 		pDoc->SetModifiedFlag();
 		pDoc->UpdateAllViews(NULL);
-		// ----- 测试代码 end -----
 	}
 	CScrollView::OnLButtonDown(nFlags, point);
 
@@ -171,7 +173,6 @@ CDrawingDoc* CDrawingView::GetDocument() const // 非调试版本是内联的
 void CDrawingView::OnLButtonDblClk(UINT nFlags, CPoint point)
 {
 	// TODO: 在此添加消息处理程序代码和/或调用默认值
-		// TODO: 在此添加消息处理程序代码和/或调用默认值
 	CDrawingDoc* pDoc = GetDocument();
 	ASSERT_VALID(pDoc);
 	if (!pDoc)	return;
@@ -199,7 +200,33 @@ void CDrawingView::OnLButtonDblClk(UINT nFlags, CPoint point)
 void CDrawingView::OnRButtonDblClk(UINT nFlags, CPoint point)
 {
 	// TODO: 在此添加消息处理程序代码和/或调用默认值
-	CShapeDlg dlg;
-	dlg.DoModal();
+	CDrawingDoc* pDoc = GetDocument();
+	ASSERT_VALID(pDoc);
+	if (!pDoc)	return;
+
+	CClientDC dc(this);
+	CPoint pntLogical = point;
+	OnPrepareDC(&dc);
+	dc.DPtoLP(&pntLogical);//DP->LP进行转换
+
+	for (int i = pDoc->m_Elements.GetCount() - 1; i >= 0; i--)
+	{
+		if (((CShape*)pDoc->m_Elements[i])->IsMatched(pntLogical))
+		{
+			CShapeDlg dlg(*(CShape*)pDoc->m_Elements[i]);
+			if (dlg.DoModal() == IDOK)
+			{
+				// 释放旧的图元对象
+				delete pDoc->m_Elements[i];
+				// 设置新的图元对象
+				pDoc->m_Elements[i] = dlg.GetShapeValueFromDlg();
+				pDoc->SetModifiedFlag();
+				pDoc->UpdateAllViews(NULL);
+			}
+			break;
+		}
+	}
+
+
 	CScrollView::OnRButtonDblClk(nFlags, point);
 }
