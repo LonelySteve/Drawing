@@ -189,8 +189,7 @@ void CDrawingView::OnLButtonDblClk(UINT nFlags, CPoint point)
 			pDoc->m_Elements.RemoveAt(i);
 			pDoc->SetModifiedFlag();
 			pDoc->UpdateAllViews(NULL);
-			CScrollView::OnLButtonDblClk(nFlags, point);
-			return;
+			break;
 		}
 	}
 	CScrollView::OnLButtonDblClk(nFlags, point);
