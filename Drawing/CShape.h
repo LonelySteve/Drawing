@@ -13,8 +13,10 @@ public:
 
 	void SetPen(COLORREF color, int width, int type);
 	bool GetPen(CPen &pen);
+	void GetPen(COLORREF &color, int &width, int &type);
 	void SetBrush(COLORREF color, int type);
 	bool GetBrush(CBrush &brush);
+	void GetBrush(COLORREF &color, int &type);
 	virtual void Draw(CDC *pDC);
 	virtual bool IsMatched(CPoint pnt) = 0;
 	virtual void SetShapeValue(ElementType type, int orgX, int orgY);
@@ -28,12 +30,15 @@ protected:
 	int BorderType = 0;
 	int BorderWidth = 0;
 	COLORREF FillColor = RGB(0, 0, 0);
-	int FillType = -1;
+	int FillType = 0;
 
 	virtual void ToDraw(CDC *pDC) = 0;
 	virtual void Serialize(CArchive &ar);
+};
 
-private:
+/*δ֪ͼԪ��*/
+class CNotSet :public CShape
+{
 
 };
 

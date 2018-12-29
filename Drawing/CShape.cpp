@@ -32,6 +32,13 @@ bool CShape::GetPen(CPen & pen)
 	return pen.CreatePen(BorderType, BorderWidth, BorderColor);
 }
 
+void CShape::GetPen(COLORREF & color, int & width, int & type)
+{
+	color = this->BorderColor;
+	width = this->BorderWidth;
+	type = this->BorderType;
+}
+
 void CShape::SetBrush(COLORREF color, int type)
 {
 	FillColor = color;
@@ -42,6 +49,12 @@ bool CShape::GetBrush(CBrush & brush)
 {
 	return FillType >= HS_HORIZONTAL && FillType <= HS_DIAGCROSS ?
 		brush.CreateHatchBrush(FillType, FillColor) : brush.CreateSolidBrush(FillColor);
+}
+
+void CShape::GetBrush(COLORREF & color, int & type)
+{
+	color = this->FillColor;
+	type = this->FillType;
 }
 
 void CShape::Draw(CDC * pDC)
