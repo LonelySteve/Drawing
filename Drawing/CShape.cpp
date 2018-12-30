@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "CShape.h"
 #include <math.h>
-
+#include "util.h"
 
 IMPLEMENT_SERIAL(CSquare, CObject, 1)
 IMPLEMENT_SERIAL(CCircle, CObject, 1)
@@ -377,7 +377,22 @@ CText::CText(int orgX, int orgY, CString text, int height, int angle, COLORREF f
 
 bool CText::IsMatched(CPoint pnt)
 {
-	return false;
+	// 获取不旋转时，TEXT所占用的矩形区域四点
+	POINT lt{ rect.left,rect.top };
+	POINT lb{ rect.left,rect.bottom };
+	POINT rt{ rect.right,rect.top };
+	POINT rb{ rect.right,rect.bottom };
+
+	POINT point[4]{
+		RotationPoint(lt,lt,angle),
+		RotationPoint(lt,rt,angle),
+		RotationPoint(lt,rb,angle),
+		RotationPoint(lt,lb,angle)
+	};
+
+	CRgn rgn;
+	rgn.CreatePolygonRgn(point, 4, ALTERNATE);
+	return rgn.PtInRegion(pnt);
 }
 
 void CText::Serialize(CArchive & ar)
@@ -433,6 +448,12 @@ void CText::ToDraw(CDC * pDC)
 		_T("微软雅黑"));
 	OldFont = pDC->SelectObject(F);
 
+	CSize size = pDC->GetTextExtent(text);
+	rect.left = OrgX ;
+	rect.top = OrgY ;
+	rect.right = OrgX + size.cx;
+	rect.bottom = OrgY + size.cy;
+	// TODO 以原点居中绘制文本
 	pDC->TextOutW(OrgX, OrgY, text);
 	pDC->SelectObject(OldFont);
 	delete F;

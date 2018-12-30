@@ -136,8 +136,8 @@ public:
 
 protected:
 	virtual void ToDraw(CDC* pDC);
-
 private:
+	RECT rect;
 	CString text;
 	int height;
 	int angle;
