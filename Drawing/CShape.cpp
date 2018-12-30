@@ -453,6 +453,10 @@ void CText::ToDraw(CDC * pDC)
 	rect.top = OrgY ;
 	rect.right = OrgX + size.cx;
 	rect.bottom = OrgY + size.cy;
+	// FIX:无法修改字体颜色
+	pDC->SetTextColor(BorderColor);
+	// 修改背景颜色
+	pDC->SetBkColor(FillColor);
 	// TODO 以原点居中绘制文本
 	pDC->TextOutW(OrgX, OrgY, text);
 	pDC->SelectObject(OldFont);
