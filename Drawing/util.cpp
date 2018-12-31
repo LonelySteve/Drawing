@@ -3,31 +3,41 @@
 
 #define PI 3.1415926
 
+double AngToRad(double angle)
+{
+	return angle * PI / 180;
+}
+
+double RadToAng(double radian)
+{
+	return radian * 180 / PI;
+}
+
 POINT RotationPoint(POINT fixedPoint, POINT srcPoint, double angle)
 {
  
 	// 这里首先将直角坐标转换为极坐标
-		// 获取相对x值与y值
-	double relatively_x = double(srcPoint.x - fixedPoint.x);
-	double relatively_y = double(srcPoint.y - fixedPoint.y);
+	// 获取x值与y值的偏移量
+	double offset_x = double(srcPoint.x - fixedPoint.x);
+	double offset_y = double(srcPoint.y - fixedPoint.y);
 	// 获取极坐标极半径
-	double polar_radius = sqrt(pow(relatively_x, 2) + pow(relatively_y, 2));
+	double polar_radius = sqrt(pow(offset_x, 2) + pow(offset_y, 2));
 	// 将原变化角度转换为改变的极角
-	double change_polar_angle = angle * PI / 180;
+	double change_polar_angle = AngToRad(angle);
 	// 获取原极角
 	double src_polar_angle;
-	if (relatively_x == 0)
+	if (offset_x == 0)
 	{
-		if (relatively_y > 0)
+		if (offset_y > 0)
 			src_polar_angle = PI / 2;
-		else if (relatively_y < 0)
+		else if (offset_y < 0)
 			src_polar_angle = 3 * PI / 4;
 		else
 			return srcPoint;
 	}
 	else
 	{
-		src_polar_angle = atan(relatively_y / relatively_x);
+		src_polar_angle = atan(offset_y / offset_x);
 	}
 	// 减去对应弧度后，转换回直角坐标
 	double x = polar_radius * cos(src_polar_angle - change_polar_angle);
