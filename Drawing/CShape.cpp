@@ -454,16 +454,24 @@ void CText::ToDraw(CDC * pDC)
 	OldFont = pDC->SelectObject(F);
 
 	CSize size = pDC->GetTextExtent(text);
-	rect.left = OrgX;
-	rect.top = OrgY;
-	rect.right = OrgX + size.cx;
-	rect.bottom = OrgY + size.cy;
+	double changed_rad = AngToRad(angle);
+	double offset_rad = changed_rad - atan(double(size.cy) / double(size.cx));
+	double offset_z = sqrt(pow(size.cx / 2.0, 2) + pow(size.cy / 2.0, 2));
+	double offset_y = sin(offset_rad) * offset_z;
+	double offset_x = cos(offset_rad) * offset_z;
+	double x, y;
+	x = OrgX - offset_x;
+	y = OrgY + offset_y;
+	rect.left = x;
+	rect.top = y;
+	rect.right = x + size.cx;
+	rect.bottom = y + size.cy;
 	// FIX:无法修改字体颜色
 	pDC->SetTextColor(BorderColor);
 	// 修改背景颜色
 	pDC->SetBkColor(FillColor);
 	// TODO 以原点居中绘制文本
-	pDC->TextOutW(OrgX, OrgY, text);
+	pDC->TextOutW(x, y, text);
 	pDC->SelectObject(OldFont);
 	delete F;
 }
