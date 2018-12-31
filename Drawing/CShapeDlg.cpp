@@ -239,10 +239,13 @@ void CShapeDlg::OnClickedBrushColorButton()
 
 void CShapeDlg::OnSelchangeComboShapeType()
 {
+	// 根据不同的图元类型启用或禁用部分控件
 	m_edit_widthRadiusAngle.EnableWindow(TRUE);
 	m_edit_height.EnableWindow(TRUE);
 	m_edit_text.EnableWindow(TRUE);
 	m_edit_penWidth.EnableWindow(TRUE);
+	m_listBox_brushType.EnableWindow(TRUE);
+	m_listBox_penType.EnableWindow(TRUE);
 	UpdateData(TRUE);
 	switch (m_Type)
 	{
@@ -257,6 +260,9 @@ void CShapeDlg::OnSelchangeComboShapeType()
 		m_edit_text.EnableWindow(FALSE);
 		break;
 	case TEXT:
+		m_listBox_brushType.EnableWindow(FALSE);
+		m_listBox_penType.EnableWindow(FALSE);
+		m_edit_penWidth.EnableWindow(FALSE);
 		break;
 	}
 }
