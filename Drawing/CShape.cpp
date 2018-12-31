@@ -470,7 +470,7 @@ void CText::ToDraw(CDC * pDC)
 	pDC->SetTextColor(BorderColor);
 	// 修改背景颜色
 	pDC->SetBkColor(FillColor);
-	// TODO 以原点居中绘制文本
+	// 以原点居中绘制文本
 	pDC->TextOutW(x, y, text);
 	pDC->SelectObject(OldFont);
 	delete F;
