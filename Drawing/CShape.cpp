@@ -70,6 +70,11 @@ void CShape::Draw(CDC * pDC)
 
 	pDC->SelectObject(pOldPen);
 	pDC->SelectObject(pOldBrush);
+#ifdef DEBUG
+	// 绘制反色原点
+	RECT rect{ OrgX - 1,OrgY - 1,OrgX + 3,OrgY + 3 };
+	pDC->InvertRect(&rect);
+#endif // DEBUG
 }
 
 void CShape::SetShapeValue(ElementType type, int orgX, int orgY)
@@ -449,8 +454,8 @@ void CText::ToDraw(CDC * pDC)
 	OldFont = pDC->SelectObject(F);
 
 	CSize size = pDC->GetTextExtent(text);
-	rect.left = OrgX ;
-	rect.top = OrgY ;
+	rect.left = OrgX;
+	rect.top = OrgY;
 	rect.right = OrgX + size.cx;
 	rect.bottom = OrgY + size.cy;
 	// FIX:无法修改字体颜色
