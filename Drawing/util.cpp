@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "util.h"
 
-#define PI 3.1415926
 
 double AngToRad(double angle)
 {
@@ -15,7 +14,7 @@ double RadToAng(double radian)
 
 POINT RotationPoint(POINT fixedPoint, POINT srcPoint, double angle)
 {
- 
+
 	// 这里首先将直角坐标转换为极坐标
 	// 获取x值与y值的偏移量
 	double offset_x = double(srcPoint.x - fixedPoint.x);
