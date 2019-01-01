@@ -131,12 +131,13 @@ void CDrawingView::OnLButtonDown(UINT nFlags, CPoint point)
 		CPoint pntLogical = point;
 		OnPrepareDC(&dc);
 		dc.DPtoLP(&pntLogical);//DP->LP进行转换
-		// 动态分配内存
-		CSquare defSquare(pntLogical.x, pntLogical.y, 100);
-		CShapeDlg dlg(defSquare);
+		// 默认选择正方形，并传递鼠标坐标
+		CSquare sample(pntLogical.x, pntLogical.y, 100);
+		CShapeDlg dlg(&sample);
 		if (dlg.DoModal() == IDOK)
 		{
-			pDoc->m_Elements.Add(dlg.GetShapeValueFromDlg());
+			CShape * new_pShape = CShape::DynamicCShapeObj(dlg.GetCurShapeValueFromDlg(), true);
+			pDoc->m_Elements.Add(new_pShape);
 		}
 		pDoc->SetModifiedFlag();
 		pDoc->UpdateAllViews(NULL);
@@ -213,13 +214,14 @@ void CDrawingView::OnRButtonDblClk(UINT nFlags, CPoint point)
 	{
 		if (((CShape*)pDoc->m_Elements[i])->IsMatched(pntLogical))
 		{
-			CShapeDlg dlg(*(CShape*)pDoc->m_Elements[i]);
+			CShapeDlg dlg((CShape*)pDoc->m_Elements[i]);
 			if (dlg.DoModal() == IDOK)
 			{
 				// 释放旧的图元对象
 				delete pDoc->m_Elements[i];
 				// 设置新的图元对象
-				pDoc->m_Elements[i] = dlg.GetShapeValueFromDlg();
+				CShape * new_pShape = CShape::DynamicCShapeObj(dlg.GetCurShapeValueFromDlg(), true);
+				pDoc->m_Elements[i] = new_pShape;
 				pDoc->SetModifiedFlag();
 				pDoc->UpdateAllViews(NULL);
 			}
