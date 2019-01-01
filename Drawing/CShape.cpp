@@ -11,6 +11,36 @@ IMPLEMENT_SERIAL(CText, CObject, 1)
 IMPLEMENT_SERIAL(CEllipse, CObject, 1)
 
 #pragma region CShape
+
+CShape* CShape::DynamicCShapeObj(const CShape * shape, bool copy)
+{
+#define TM_0(className) copy ? new className((className&)*shape) : new className()
+	PTR_NULL_RETURN(shape, NULL);
+	switch (shape->GetShapeType())
+	{
+	case SQUARE:
+		return TM_0(CSquare);
+	case RECTANGLE:
+		return TM_0(CRectangle);
+	case CIRCLE:
+		return TM_0(CCircle);
+	case ELLIPSE:
+		return TM_0(CEllipse);
+	case TRIANGLE:
+		return TM_0(CTriangle);
+	case TEXT:
+		return TM_0(CText);
+	}
+#undef TM_0
+	return NULL;
+}
+
+CShape::CShape(const CShape & shape)
+{
+	shape.GetBrush(&FillColor, &FillType);
+	shape.GetPen(&BorderColor, &BorderWidth, &BorderType);
+	shape.GetShapeValue(&Type, &OrgX, &OrgY);
+}
 CShape::CShape(ElementType type, int orgX, int orgY)
 	:Type(type), OrgX(orgX), OrgY(orgY)
 {
@@ -27,16 +57,16 @@ void CShape::SetPen(COLORREF color, int width, int type)
 	BorderType = type;
 }
 
-bool CShape::GetPen(CPen & pen)
+bool CShape::GetPen(CPen & pen) const
 {
 	return pen.CreatePen(BorderType, BorderWidth, BorderColor);
 }
 
-void CShape::GetPen(COLORREF & color, int & width, int & type)
+void CShape::GetPen(COLORREF * color, int * width, int * type) const
 {
-	color = this->BorderColor;
-	width = this->BorderWidth;
-	type = this->BorderType;
+	PTR_ASSIGN(color, this->BorderColor);
+	PTR_ASSIGN(width, this->BorderWidth);
+	PTR_ASSIGN(type, this->BorderType);
 }
 
 void CShape::SetBrush(COLORREF color, int type)
@@ -45,16 +75,21 @@ void CShape::SetBrush(COLORREF color, int type)
 	FillType = type;
 }
 
-bool CShape::GetBrush(CBrush & brush)
+bool CShape::GetBrush(CBrush & brush) const
 {
 	return FillType >= HS_HORIZONTAL && FillType <= HS_DIAGCROSS ?
 		brush.CreateHatchBrush(FillType, FillColor) : brush.CreateSolidBrush(FillColor);
 }
 
-void CShape::GetBrush(COLORREF & color, int & type)
+void CShape::GetBrush(COLORREF * color, int * type) const
 {
-	color = this->FillColor;
-	type = this->FillType;
+	PTR_ASSIGN(color, this->FillColor);
+	PTR_ASSIGN(type, this->FillType);
+}
+
+ElementType CShape::GetShapeType() const
+{
+	return Type;
 }
 
 void CShape::Draw(CDC * pDC)
@@ -70,11 +105,11 @@ void CShape::Draw(CDC * pDC)
 
 	pDC->SelectObject(pOldPen);
 	pDC->SelectObject(pOldBrush);
-#ifdef DEBUG
-	// 绘制反色原点
-	RECT rect{ OrgX - 1,OrgY - 1,OrgX + 3,OrgY + 3 };
-	pDC->InvertRect(&rect);
-#endif // DEBUG
+	#ifdef DEBUG
+		// 绘制反色原点
+		RECT rect{ OrgX - 3,OrgY - 3,OrgX + 3,OrgY + 3 };
+		pDC->InvertRect(&rect);
+	#endif // DEBUG
 }
 
 void CShape::SetShapeValue(ElementType type, int orgX, int orgY)
@@ -84,11 +119,11 @@ void CShape::SetShapeValue(ElementType type, int orgX, int orgY)
 	OrgY = orgY;
 }
 
-void CShape::GetShapeValue(ElementType & type, int & orgX, int & orgY)
+void CShape::GetShapeValue(ElementType * type, int * orgX, int * orgY) const
 {
-	type = Type;
-	orgX = OrgX;
-	orgY = OrgY;
+	PTR_ASSIGN(type, Type);
+	PTR_ASSIGN(orgX, OrgX);
+	PTR_ASSIGN(orgY, OrgY);
 }
 
 void CShape::Serialize(CArchive & ar)
@@ -123,9 +158,14 @@ void CShape::Serialize(CArchive & ar)
 #pragma region 子类
 #pragma region CSquare
 CSquare::CSquare()
-	: CShape(SQUARE, 0, 0), width(0)
+	: CShape(SQUARE, 0, 0), width(100)
 {
 
+}
+
+CSquare::CSquare(const CSquare & square) : CShape(square)
+{
+	square.GetShapeValue(NULL, NULL, NULL, &width);
 }
 
 CSquare::CSquare(int orgX, int orgY, int width)
@@ -136,7 +176,6 @@ CSquare::CSquare(int orgX, int orgY, int width)
 CSquare::CSquare(int orgX, int orgY, int width, COLORREF fillColor, int fillType, COLORREF borderColor, int borderWidth, int borderType)
 	: CShape(SQUARE, orgX, orgY, fillColor, fillType, borderColor, borderWidth, borderType), width(width)
 {
-
 }
 
 bool CSquare::IsMatched(CPoint pnt)
@@ -170,10 +209,10 @@ void CSquare::SetShapeValue(ElementType type, int orgX, int orgY, int width)
 	this->width = width;
 }
 
-void CSquare::GetShapeValue(ElementType & type, int & orgX, int & orgY, int &width)
+void CSquare::GetShapeValue(ElementType * type, int * orgX, int * orgY, int *width) const
 {
 	CShape::GetShapeValue(type, orgX, orgY);
-	width = this->width;
+	PTR_ASSIGN(width, this->width);
 }
 
 void CSquare::ToDraw(CDC * pDC)
@@ -185,8 +224,13 @@ void CSquare::ToDraw(CDC * pDC)
 
 #pragma region CCircle
 CCircle::CCircle()
-	:CShape(CIRCLE, 0, 0), radius(0)
+	:CShape(CIRCLE, 0, 0), radius(100)
 {
+}
+
+CCircle::CCircle(const CCircle & circle) : CShape(circle)
+{
+	circle.GetShapeValue(NULL, NULL, NULL, &radius);
 }
 
 CCircle::CCircle(int orgX, int orgY, int radius)
@@ -225,10 +269,10 @@ void CCircle::SetShapeValue(ElementType type, int orgX, int orgY, int radius)
 	this->radius = radius;
 }
 
-void CCircle::GetShapeValue(ElementType & type, int & orgX, int & orgY, int & radius)
+void CCircle::GetShapeValue(ElementType * type, int * orgX, int * orgY, int * radius) const
 {
 	CShape::GetShapeValue(type, orgX, orgY);
-	radius = this->radius;
+	PTR_ASSIGN(radius, this->radius);
 }
 
 void CCircle::ToDraw(CDC * pDC)
@@ -241,8 +285,13 @@ void CCircle::ToDraw(CDC * pDC)
 #pragma region CRectangle
 
 CRectangle::CRectangle()
-	: CShape(RECTANGLE, 0, 0), width(0), height(0)
+	: CShape(RECTANGLE, 0, 0), width(200), height(100)
 {
+}
+
+CRectangle::CRectangle(const CRectangle & rectangle) : CShape(rectangle)
+{
+	rectangle.GetShapeValue(NULL, NULL, NULL, &width, &height);
 }
 
 CRectangle::CRectangle(int orgX, int orgY, int width, int height)
@@ -288,11 +337,11 @@ void CRectangle::SetShapeValue(ElementType type, int orgX, int orgY, int width, 
 	this->width = width;
 	this->height = height;
 }
-void CRectangle::GetShapeValue(ElementType & type, int & orgX, int & orgY, int & width, int & height)
+void CRectangle::GetShapeValue(ElementType * type, int * orgX, int * orgY, int * width, int * height) const
 {
 	CShape::GetShapeValue(type, orgX, orgY);
-	width = this->width;
-	height = this->height;
+	PTR_ASSIGN(width, this->width);
+	PTR_ASSIGN(height, this->height);
 }
 void CRectangle::ToDraw(CDC * pDC)
 {
@@ -302,8 +351,13 @@ void CRectangle::ToDraw(CDC * pDC)
 
 #pragma region CTriangle
 
-CTriangle::CTriangle() :CShape(TRIANGLE, 0, 0, 0, 0, 0, 0, 0)
+CTriangle::CTriangle() :CShape(TRIANGLE, 0, 0), width(100)
 {
+}
+
+CTriangle::CTriangle(const CTriangle & triangle) : CShape(triangle)
+{
+	triangle.GetShapeValue(NULL, NULL, NULL, &width);
 }
 
 CTriangle::CTriangle(int orgX, int orgY, int width)
@@ -347,10 +401,10 @@ void CTriangle::SetShapeValue(ElementType type, int orgX, int orgY, int width)
 	CShape::SetShapeValue(type, orgX, orgY);
 	this->width = width;
 }
-void CTriangle::GetShapeValue(ElementType & type, int & orgX, int & orgY, int & width)
+void CTriangle::GetShapeValue(ElementType * type, int * orgX, int * orgY, int * width) const
 {
 	CShape::GetShapeValue(type, orgX, orgY);
-	width = this->width;
+	PTR_ASSIGN(width, this->width);
 }
 void CTriangle::ToDraw(CDC * pDC)
 {
@@ -366,8 +420,13 @@ void CTriangle::ToDraw(CDC * pDC)
 
 #pragma region CText
 CText::CText()
-	: CShape(TEXT, 0, 0), text("String 字符串 123"), height(0), angle(0)
+	: CShape(TEXT, 0, 0), text("这是一段示例文本"), height(25), angle(0), rect()
 {
+}
+
+CText::CText(const CText & text) : CShape(text)
+{
+	text.GetShapeValue(NULL, NULL, NULL, &angle, &this->text, &height);
 }
 
 CText::CText(int orgX, int orgY, CString text, int height, int angle)
@@ -417,7 +476,7 @@ void CText::Serialize(CArchive & ar)
 	CShape::Serialize(ar);
 }
 
-void CText::SetShapeValue(ElementType type, int orgX, int orgY, CString text, int height, int angle)
+void CText::SetShapeValue(ElementType type, int orgX, int orgY, int angle, CString text, int height)
 {
 	CShape::SetShapeValue(type, orgX, orgY);
 	this->text = text;
@@ -425,18 +484,18 @@ void CText::SetShapeValue(ElementType type, int orgX, int orgY, CString text, in
 	this->angle = angle;
 }
 
-void CText::GetShapeValue(ElementType & type, int & orgX, int & orgY, CString & text, int & height, int & angle)
+void CText::GetShapeValue(ElementType * type, int * orgX, int * orgY, int * angle, CString * text, int * height) const
 {
 	CShape::GetShapeValue(type, orgX, orgY);
-	text = this->text;
-	height = this->height;
-	angle = this->angle;
+	PTR_ASSIGN(angle, this->angle);
+	PTR_ASSIGN(text, this->text);
+	PTR_ASSIGN(height, this->height);
 }
 
 void CText::ToDraw(CDC * pDC)
 {
-	CFont *OldFont, *F = new CFont;
-	F->CreateFontW(
+	CFont *OldFont, F;
+	F.CreateFontW(
 		height,
 		0,
 		angle * 10,
@@ -451,7 +510,7 @@ void CText::ToDraw(CDC * pDC)
 		DEFAULT_QUALITY,
 		DEFAULT_PITCH | FF_SWISS,
 		_T("微软雅黑"));
-	OldFont = pDC->SelectObject(F);
+	OldFont = pDC->SelectObject(&F);
 
 	CSize size = pDC->GetTextExtent(text);
 	double changed_rad = AngToRad(angle);
@@ -467,21 +526,28 @@ void CText::ToDraw(CDC * pDC)
 	rect.right = x + size.cx;
 	rect.bottom = y + size.cy;
 	// FIX:无法修改字体颜色
-	pDC->SetTextColor(BorderColor);
+	COLORREF oldTxColor = pDC->SetTextColor(BorderColor);
 	// 修改背景颜色
-	pDC->SetBkColor(FillColor);
+	COLORREF oldBkColor = pDC->SetBkColor(FillColor);
 	// 以原点居中绘制文本
 	pDC->TextOutW(x, y, text);
 	pDC->SelectObject(OldFont);
-	delete F;
+	pDC->SetTextColor(oldTxColor);
+	// 不要忘了设置回背景颜色！
+	pDC->SetBkColor(oldBkColor);
 }
 
 #pragma endregion
 
 #pragma region CEllipse
 CEllipse::CEllipse()
-	: CShape(ELLIPSE, 0, 0), width(0), height(0)
+	: CShape(ELLIPSE, 0, 0), width(200), height(100)
 {
+}
+
+CEllipse::CEllipse(const CEllipse & ellipse) : CShape(ellipse)
+{
+	ellipse.GetShapeValue(NULL, NULL, NULL, &width, &height);
 }
 
 CEllipse::CEllipse(int orgX, int orgY, int width, int height)
@@ -523,11 +589,11 @@ void CEllipse::SetShapeValue(ElementType type, int orgX, int orgY, int width, in
 	this->width = width;
 	this->height = height;
 }
-void CEllipse::GetShapeValue(ElementType & type, int & orgX, int & orgY, int & width, int & height)
+void CEllipse::GetShapeValue(ElementType * type, int * orgX, int * orgY, int * width, int * height) const
 {
 	CShape::GetShapeValue(type, orgX, orgY);
-	width = this->width;
-	height = this->height;
+	PTR_ASSIGN(width, this->width);
+	PTR_ASSIGN(height, this->height);
 }
 void CEllipse::ToDraw(CDC * pDC)
 {
