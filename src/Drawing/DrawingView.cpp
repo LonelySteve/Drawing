@@ -17,9 +17,9 @@
 #define new DEBUG_NEW
 #endif
 
-
+// CShapes
+#include "CShapes.h"
 // CDrawingView
-#include "CShape.h"
 
 #include "CShapeDlg.h"
 

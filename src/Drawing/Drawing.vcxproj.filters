@@ -13,6 +13,12 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="头文件\CShape">
+      <UniqueIdentifier>{ee73bfab-9a59-40a9-a3d2-78a860f7cc38}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\CShape">
+      <UniqueIdentifier>{1ea14ed1-a2e0-4557-8aed-4a82112f9a35}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Drawing.h">
@@ -36,13 +42,34 @@
     <ClInclude Include="Resource.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="CShape.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="CShapeDlg.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="util.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CShape.h">
+      <Filter>头文件\CShape</Filter>
+    </ClInclude>
+    <ClInclude Include="CText.h">
+      <Filter>头文件\CShape</Filter>
+    </ClInclude>
+    <ClInclude Include="CSquare.h">
+      <Filter>头文件\CShape</Filter>
+    </ClInclude>
+    <ClInclude Include="CCircle.h">
+      <Filter>头文件\CShape</Filter>
+    </ClInclude>
+    <ClInclude Include="CRectangle.h">
+      <Filter>头文件\CShape</Filter>
+    </ClInclude>
+    <ClInclude Include="CTriangle.h">
+      <Filter>头文件\CShape</Filter>
+    </ClInclude>
+    <ClInclude Include="CEllipse.h">
+      <Filter>头文件\CShape</Filter>
+    </ClInclude>
+    <ClInclude Include="CShapes.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
@@ -62,14 +89,32 @@
     <ClCompile Include="DrawingView.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="CShape.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="CShapeDlg.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="util.cpp">
       <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="CCircle.cpp">
+      <Filter>源文件\CShape</Filter>
+    </ClCompile>
+    <ClCompile Include="CEllipse.cpp">
+      <Filter>源文件\CShape</Filter>
+    </ClCompile>
+    <ClCompile Include="CRectangle.cpp">
+      <Filter>源文件\CShape</Filter>
+    </ClCompile>
+    <ClCompile Include="CShape.cpp">
+      <Filter>源文件\CShape</Filter>
+    </ClCompile>
+    <ClCompile Include="CSquare.cpp">
+      <Filter>源文件\CShape</Filter>
+    </ClCompile>
+    <ClCompile Include="CText.cpp">
+      <Filter>源文件\CShape</Filter>
+    </ClCompile>
+    <ClCompile Include="CTriangle.cpp">
+      <Filter>源文件\CShape</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

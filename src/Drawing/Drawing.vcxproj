@@ -183,8 +183,15 @@
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="CCircle.h" />
+    <ClInclude Include="CEllipse.h" />
+    <ClInclude Include="CRectangle.h" />
     <ClInclude Include="CShape.h" />
     <ClInclude Include="CShapeDlg.h" />
+    <ClInclude Include="CShapes.h" />
+    <ClInclude Include="CSquare.h" />
+    <ClInclude Include="CText.h" />
+    <ClInclude Include="CTriangle.h" />
     <ClInclude Include="Drawing.h" />
     <ClInclude Include="DrawingDoc.h" />
     <ClInclude Include="DrawingView.h" />
@@ -195,8 +202,14 @@
     <ClInclude Include="util.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CCircle.cpp" />
+    <ClCompile Include="CEllipse.cpp" />
+    <ClCompile Include="CRectangle.cpp" />
     <ClCompile Include="CShape.cpp" />
     <ClCompile Include="CShapeDlg.cpp" />
+    <ClCompile Include="CSquare.cpp" />
+    <ClCompile Include="CText.cpp" />
+    <ClCompile Include="CTriangle.cpp" />
     <ClCompile Include="Drawing.cpp" />
     <ClCompile Include="DrawingDoc.cpp" />
     <ClCompile Include="DrawingView.cpp" />

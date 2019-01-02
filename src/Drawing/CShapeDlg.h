@@ -1,5 +1,5 @@
 ﻿#pragma once
-#include "CShape.h"
+#include "CShapes.h"
 
 // CShapeDlg 对话框
 

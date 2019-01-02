@@ -3,9 +3,9 @@
 
 #include "stdafx.h"
 #include "Drawing.h"
-#include "CShapeDlg.h"
 #include "afxdialogex.h"
-#include "CShape.h"
+#include "CShapeDlg.h"
+#include "CShapes.h"
 #include "util.h"
 
 // CShapeDlg 对话框
