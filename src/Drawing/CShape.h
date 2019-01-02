@@ -22,8 +22,8 @@ public:
 	ElementType GetShapeType() const;
 	virtual void Draw(CDC *pDC);
 	virtual bool IsMatched(CPoint pnt) = 0;
-	virtual void SetShapeValue(ElementType type, int orgX, int orgY);
-	virtual void GetShapeValue(ElementType *type, int *orgX, int *orgY) const;
+	void SetShapeValue(ElementType type, int orgX, int orgY);
+	void GetShapeValue(ElementType *type, int *orgX, int *orgY) const;
 
 protected:
 	ElementType Type;

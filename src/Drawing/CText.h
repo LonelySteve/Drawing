@@ -12,15 +12,16 @@ public:
 
 	virtual bool IsMatched(CPoint pnt);
 	virtual void Serialize(CArchive &ar);
-	virtual void SetShapeValue(ElementType type, int orgX, int orgY, int angle, CString text, int height);
-	virtual void GetShapeValue(ElementType *type, int *orgX, int *orgY, int *angle, CString *text, int *height) const;
+
+	void SetShapeValue(ElementType type, int orgX, int orgY, int angle, CString text, int height);
+	void GetShapeValue(ElementType *type, int *orgX, int *orgY, int *angle, CString *text, int *height) const;
 
 protected:
-	virtual void ToDraw(CDC* pDC);
-private:
 	RECT rect;
 	CString text;
 	int height;
 	int angle;
+	virtual void ToDraw(CDC* pDC);
+private:
 	DECLARE_SERIAL(CText)
 };

@@ -12,13 +12,13 @@ public:
 
 	virtual bool IsMatched(CPoint pnt);
 	virtual void Serialize(CArchive &ar);
-	virtual void SetShapeValue(ElementType type, int orgX, int orgY, int radius);
-	virtual void GetShapeValue(ElementType *type, int *orgX, int *orgY, int *radius) const;
+	void SetShapeValue(ElementType type, int orgX, int orgY, int radius);
+	void GetShapeValue(ElementType *type, int *orgX, int *orgY, int *radius) const;
 
 protected:
+	int radius;
 	virtual void ToDraw(CDC* pDC);
 
 private:
-	int radius;
 	DECLARE_SERIAL(CCircle)
 };

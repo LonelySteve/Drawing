@@ -12,13 +12,12 @@ public:
 
 	virtual bool IsMatched(CPoint pnt);
 	virtual void Serialize(CArchive &ar);
-	virtual void SetShapeValue(ElementType type, int orgX, int orgY, int width);
-	virtual void GetShapeValue(ElementType *type, int *orgX, int *orgY, int *width) const;
+	void SetShapeValue(ElementType type, int orgX, int orgY, int width);
+	void GetShapeValue(ElementType *type, int *orgX, int *orgY, int *width) const;
 
 protected:
-	virtual void ToDraw(CDC* pDC);
-
-private:
 	int width;
+	virtual void ToDraw(CDC* pDC);
+private:
 	DECLARE_SERIAL(CTriangle)
 };

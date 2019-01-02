@@ -12,14 +12,14 @@ public:
 
 	virtual bool IsMatched(CPoint pnt);
 	virtual void Serialize(CArchive &ar);
-	virtual void SetShapeValue(ElementType type, int orgX, int orgY, int width, int height);
-	virtual void GetShapeValue(ElementType *type, int *orgX, int *orgY, int *width, int *height) const;
+	void SetShapeValue(ElementType type, int orgX, int orgY, int width, int height);
+	void GetShapeValue(ElementType *type, int *orgX, int *orgY, int *width, int *height) const;
 
 protected:
+	int width;
+	int height;
 	virtual void ToDraw(CDC* pDC);
 
 private:
-	int width;
-	int height;
 	DECLARE_SERIAL(CEllipse)
 };
