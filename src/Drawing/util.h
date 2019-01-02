@@ -13,8 +13,8 @@
 
 #define PTR_VAL_ASSIGN(ptr,val) IF_ASSIGN(ptr == NULL,ptr,val)
 
-double AngToRad(double angle);
+#define ANG_TO_RAD(angle) angle * PI / 180
 
-double RadToAng(double radian);
+#define RAD_TO_ANG(radian) radian * 180 / PI
 
 POINT RotationPoint(POINT fixedPoint, POINT srcPoint, double angle);

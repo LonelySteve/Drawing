@@ -1,17 +1,6 @@
 #include "stdafx.h"
 #include "util.h"
 
-
-double AngToRad(double angle)
-{
-	return angle * PI / 180;
-}
-
-double RadToAng(double radian)
-{
-	return radian * 180 / PI;
-}
-
 POINT RotationPoint(POINT fixedPoint, POINT srcPoint, double angle)
 {
 
@@ -22,7 +11,7 @@ POINT RotationPoint(POINT fixedPoint, POINT srcPoint, double angle)
 	// 获取极坐标极半径
 	double polar_radius = sqrt(pow(offset_x, 2) + pow(offset_y, 2));
 	// 将原变化角度转换为改变的极角
-	double change_polar_angle = AngToRad(angle);
+	double change_polar_angle = ANG_TO_RAD(angle);
 	// 获取原极角
 	double src_polar_angle;
 	if (offset_x == 0)

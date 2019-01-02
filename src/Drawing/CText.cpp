@@ -98,7 +98,7 @@ void CText::ToDraw(CDC * pDC)
 	OldFont = pDC->SelectObject(&F);
 
 	CSize size = pDC->GetTextExtent(text);
-	double changed_rad = AngToRad(angle);
+	double changed_rad = ANG_TO_RAD(angle);
 	double offset_rad = changed_rad - atan(double(size.cy) / double(size.cx));
 	double offset_z = sqrt(pow(size.cx / 2.0, 2) + pow(size.cy / 2.0, 2));
 	double offset_y = sin(offset_rad) * offset_z;
