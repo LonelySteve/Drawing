@@ -110,7 +110,7 @@ BOOL CShapeDlg::OnInitDialog()
 		ElementType type = pShape->GetShapeType();
 		delete pShapes[type];
 		// 调用CShape的动态内存拷贝函数拷贝源指针指向的对象
-		pShapes[type] = CShape::DynamicCShapeObj(pShape, true);
+		pShapes[type] = CShape::DynamicCShapeObj(pShape);
 	}
 	else
 	{

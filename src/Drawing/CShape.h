@@ -8,7 +8,7 @@ enum ElementType { SQUARE, RECTANGLE, CIRCLE, ELLIPSE, TRIANGLE, TEXT };
 class CShape : public CObject
 {
 public:
-	static CShape * DynamicCShapeObj(const CShape * shape, bool copy = false);
+	static CShape * DynamicCShapeObj(const CShape * shape, bool copy = true);
 	CShape(const CShape& shape);
 	CShape(ElementType type, int orgX, int orgY);
 	CShape(ElementType type, int orgX, int orgY, COLORREF fillColor, int fillType, COLORREF borderColor, int borderWidth, int borderType);

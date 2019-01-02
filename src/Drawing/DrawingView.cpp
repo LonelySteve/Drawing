@@ -136,7 +136,7 @@ void CDrawingView::OnLButtonDown(UINT nFlags, CPoint point)
 		CShapeDlg dlg(&sample);
 		if (dlg.DoModal() == IDOK)
 		{
-			CShape * new_pShape = CShape::DynamicCShapeObj(dlg.GetCurShapeValueFromDlg(), true);
+			CShape * new_pShape = CShape::DynamicCShapeObj(dlg.GetCurShapeValueFromDlg());
 			pDoc->m_Elements.Add(new_pShape);
 		}
 		pDoc->SetModifiedFlag();
@@ -220,7 +220,7 @@ void CDrawingView::OnRButtonDblClk(UINT nFlags, CPoint point)
 				// 释放旧的图元对象
 				delete pDoc->m_Elements[i];
 				// 设置新的图元对象
-				CShape * new_pShape = CShape::DynamicCShapeObj(dlg.GetCurShapeValueFromDlg(), true);
+				CShape * new_pShape = CShape::DynamicCShapeObj(dlg.GetCurShapeValueFromDlg());
 				pDoc->m_Elements[i] = new_pShape;
 				pDoc->SetModifiedFlag();
 				pDoc->UpdateAllViews(NULL);
