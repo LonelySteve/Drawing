@@ -170,18 +170,20 @@ CDrawingDoc* CDrawingView::GetDocument() const // 非调试版本是内联的
 
 // CDrawingView 消息处理程序
 
+#define GET_LOGICAL_POINT_AND_PDOC \
+CDrawingDoc* pDoc = GetDocument(); \
+ASSERT_VALID(pDoc); \
+if (!pDoc)	return; \
+CClientDC dc(this); \
+CPoint pntLogical = point; \
+OnPrepareDC(&dc); \
+dc.DPtoLP(&pntLogical);//DP->LP进行转换
+
+
 
 void CDrawingView::OnLButtonDblClk(UINT nFlags, CPoint point)
 {
-	// TODO: 在此添加消息处理程序代码和/或调用默认值
-	CDrawingDoc* pDoc = GetDocument();
-	ASSERT_VALID(pDoc);
-	if (!pDoc)	return;
-
-	CClientDC dc(this);
-	CPoint pntLogical = point;
-	OnPrepareDC(&dc);
-	dc.DPtoLP(&pntLogical);//DP->LP进行转换
+	GET_LOGICAL_POINT_AND_PDOC
 
 	for (int i = pDoc->m_Elements.GetCount() - 1; i >= 0; i--)
 	{
@@ -200,15 +202,7 @@ void CDrawingView::OnLButtonDblClk(UINT nFlags, CPoint point)
 
 void CDrawingView::OnRButtonDblClk(UINT nFlags, CPoint point)
 {
-	// TODO: 在此添加消息处理程序代码和/或调用默认值
-	CDrawingDoc* pDoc = GetDocument();
-	ASSERT_VALID(pDoc);
-	if (!pDoc)	return;
-
-	CClientDC dc(this);
-	CPoint pntLogical = point;
-	OnPrepareDC(&dc);
-	dc.DPtoLP(&pntLogical);//DP->LP进行转换
+	GET_LOGICAL_POINT_AND_PDOC
 
 	for (int i = pDoc->m_Elements.GetCount() - 1; i >= 0; i--)
 	{
