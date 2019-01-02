@@ -78,7 +78,6 @@ END_MESSAGE_MAP()
 BOOL CShapeDlg::OnInitDialog()
 {
 	CDialogEx::OnInitDialog();
-	// TODO:  在此添加额外的初始化
 	// 初始化 m_listBox_penType
 	m_listBox_penType.AddString(_T("PS_SOLID"));
 	m_listBox_penType.AddString(_T("PS_DASH"));
@@ -186,7 +185,6 @@ HBRUSH CShapeDlg::OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor)
 {
 	HBRUSH hbr = CDialogEx::OnCtlColor(pDC, pWnd, nCtlColor);
 
-	// TODO:  在此更改 DC 的任何特性
 	int id = pWnd->GetDlgCtrlID();
 	if (id == IDC_EDIT7)
 	{
@@ -196,7 +194,6 @@ HBRUSH CShapeDlg::OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor)
 	{
 		return CreateSolidBrush(m_brush_color);
 	}
-	// TODO:  如果默认的不是所需画笔，则返回另一个画笔
 	return hbr;
 }
 
@@ -276,7 +273,6 @@ void CShapeDlg::OnClickedPenColorButton()
 
 void CShapeDlg::OnClickedBrushColorButton()
 {
-	// TODO: 在此添加控件通知处理程序代码
 	CColorDialog dlg;
 	if (dlg.DoModal() == IDOK)
 	{
