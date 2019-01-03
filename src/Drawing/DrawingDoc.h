@@ -14,7 +14,7 @@ protected: // 仅从序列化创建
 
 // 特性
 public:
-	// 用来存放图像元素的数组
+	// 用来存放图元指针的数组
 	CObArray m_Elements;
 // 操作
 public:

@@ -6,6 +6,8 @@ IMPLEMENT_SERIAL(CRectangle, CObject, 1)
 
 PREF_WH_SHAPE_PROPERTOR(CRectangle)
 
+SHAPE_CLONE(CRectangle)
+
 #pragma region ¹¹Ôìº¯Êý
 SHAPE_CLASS_NO_ARGS_CONSTRUCTOR(CRectangle, RECTANGLE, width(200), height(100))
 SHAPE_CLASS_COPY_CONSTRUCTOR(CRectangle, &width, NULL, &height)

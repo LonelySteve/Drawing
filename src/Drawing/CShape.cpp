@@ -3,29 +3,6 @@
 #include <math.h>
 #include "util.h"
 
-CShape *CShape::DynamicCShapeObj(const CShape *shape, bool copy)
-{
-#define TM_0(className) copy ? new className((className &)*shape) : new className()
-	PTR_NULL_RETURN(shape, NULL);
-	switch (shape->GetShapeType())
-	{
-	case SQUARE:
-		return TM_0(CSquare);
-	case RECTANGLE:
-		return TM_0(CRectangle);
-	case CIRCLE:
-		return TM_0(CCircle);
-	case ELLIPSE:
-		return TM_0(CEllipse);
-	case TRIANGLE:
-		return TM_0(CTriangle);
-	case TEXT:
-		return TM_0(CText);
-	}
-#undef TM_0
-	return NULL;
-}
-
 CShape::CShape(const CShape &shape)
 {
 	shape.GetBrush(&FillColor, &FillType);
@@ -40,6 +17,10 @@ CShape::CShape(ElementType type, int orgX, int orgY)
 
 CShape::CShape(ElementType type, int orgX, int orgY, COLORREF fillColor, int fillType, COLORREF borderColor, int borderWidth, int borderType)
 	: Type(type), OrgX(orgX), OrgY(orgY), FillColor(fillColor), FillType(fillType), BorderColor(borderColor), BorderType(borderType), BorderWidth(borderWidth)
+{
+}
+
+CShape::~CShape()
 {
 }
 

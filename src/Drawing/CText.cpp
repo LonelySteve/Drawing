@@ -16,12 +16,14 @@ this->height = height;
 this->angle = widthEtc;
 SHAPE_PROPERTY_END
 
+SHAPE_CLONE(CText)
+
 #pragma region 构造函数
 SHAPE_CLASS_NO_ARGS_CONSTRUCTOR(CText, TEXT, text("这是一段示例文本"), height(25), angle(0), rect())
 SHAPE_CLASS_COPY_CONSTRUCTOR(CText, &angle, &this->text, &height)
-SHAPE_CLASS_SAMPLE_ARGS_CONSTRUCTOR_START(CText, CString text, int height, int angle)
+SHAPE_CLASS_SAMPLE_ARGS_CONSTRUCTOR_START(CText, SHAPE_PROPERTY_TEXT, SHAPE_PROPERTY_HEIGHT, SHAPE_PROPERTY_ANGLE)
 SHAPE_CLASS_SAMPLE_ARGS_CONSTRUCTOR_END(TEXT, text(text), height(height), angle(angle))
-SHAPE_CLASS_FULL_ARGS_CONSTRUCTOR_START(CText, CString text, int height, int angle)
+SHAPE_CLASS_FULL_ARGS_CONSTRUCTOR_START(CText, SHAPE_PROPERTY_TEXT, SHAPE_PROPERTY_HEIGHT, SHAPE_PROPERTY_ANGLE)
 SHAPE_CLASS_FULL_ARGS_CONSTRUCTOR_END(TEXT, text(text), height(height), angle(angle))
 #pragma endregion
 

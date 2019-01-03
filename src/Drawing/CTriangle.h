@@ -1,5 +1,5 @@
 #pragma once
 #include"CShape.h"
 
-/*三角形*/
+/*正三角形*/
 PREF_W_SHAPE_CLASS(CTriangle)

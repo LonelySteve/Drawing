@@ -16,9 +16,8 @@
 #define IDR_MAINFRAME_256               129
 #define IDR_DrawingTYPE                 130
 #define IDS_EDIT_MENU                   306
-#define IDD_DIALOG1                     310
 #define IDD_CSHAPE_DLG                  310
-#define IDC_COMBO1                      1000
+#define IDC_COMBO_SHAPE_TYPE            1000
 #define IDC_LIST1                       1001
 #define IDC_EDIT1                       1002
 #define IDC_BUTTON1                     1003
@@ -29,8 +28,8 @@
 #define IDC_EDIT4                       1008
 #define IDC_EDIT5                       1009
 #define IDC_EDIT6                       1010
-#define IDC_EDIT7                       1011
-#define IDC_EDIT8                       1012
+#define IDC_EDIT_BORDER_COLOR           1011
+#define IDC_EDIT_BRUSH_COLOR            1012
 
 // Next default values for new objects
 // 

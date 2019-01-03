@@ -134,6 +134,7 @@ CDrawingDoc *CDrawingView::GetDocument() const // 非调试版本是内联的
 
 // CDrawingView 消息处理程序
 
+// 用于安全得到 pDoc 指针以及获取逻辑坐标 pntLogical
 #define GET_LOGICAL_POINT_AND_PDOC     \
 	CDrawingDoc *pDoc = GetDocument(); \
 	ASSERT_VALID(pDoc);                \
@@ -142,38 +143,52 @@ CDrawingDoc *CDrawingView::GetDocument() const // 非调试版本是内联的
 	CClientDC dc(this);                \
 	CPoint pntLogical = point;         \
 	OnPrepareDC(&dc);                  \
-	dc.DPtoLP(&pntLogical); //DP->LP进行转换
+	dc.DPtoLP(&pntLogical); //DP->LP（设备坐标到逻辑坐标）进行转换
 
+// 左键按下的事件处理程序
+// 实现功能：在按住 Ctrl 的前提下，将弹出对话框用以新建图元
 void CDrawingView::OnLButtonDown(UINT nFlags, CPoint point)
 {
-	// TODO:  在此添加消息处理程序代码和/或调用默认值
+	// 鼠标消息中，判断鼠标点击时 Ctrl 的按下状态
 	if ((nFlags & MK_CONTROL) == MK_CONTROL) //Ctrl键按下
 	{
 		GET_LOGICAL_POINT_AND_PDOC
 
 		// 默认选择正方形，并传递鼠标坐标
 		CSquare sample(pntLogical.x, pntLogical.y, 100);
+		// 声明并构造 CShapeDlg 对象
 		CShapeDlg dlg(&sample);
+		// 弹出对话框，操作结果为 OK 时
 		if (dlg.DoModal() == IDOK)
 		{
-			CShape *new_pShape = CShape::DynamicCShapeObj(dlg.GetCurShapeValueFromDlg());
+			// 从对话框对象中获取图元对象指针，并通过 CShape::Clone 函数获取一份动态分配内存的拷贝
+			CShape *new_pShape = dlg.GetCurShape()->Clone();
+			// 将拷贝好的对象指针加入CobArray数组容器
 			pDoc->m_Elements.Add(new_pShape);
+			// 设置文档已修改标志
 			pDoc->SetModifiedFlag();
+			// 更新所有视图
 			pDoc->UpdateAllViews(NULL);
 		}
 	}
 	CScrollView::OnLButtonDown(nFlags, point);
 }
 
+// 左键双击的事件处理程序
+// 实现功能：删除当前鼠标指针之处的最上层图元对象
 void CDrawingView::OnLButtonDblClk(UINT nFlags, CPoint point)
 {
 	GET_LOGICAL_POINT_AND_PDOC
 
+	// 遍历数组对象中每个成员指向的对象
 	for (int i = pDoc->m_Elements.GetCount() - 1; i >= 0; i--)
 	{
+		// 调用当前遍历对象的IsMatched方法判定鼠标坐标是否落在当前图元对象内
 		if (((CShape *)pDoc->m_Elements[i])->IsMatched(pntLogical))
 		{
+			// 释放当前遍历对象
 			delete pDoc->m_Elements[i];
+			// 从对象数组中移除指向当前遍历对象的指针
 			pDoc->m_Elements.RemoveAt(i);
 			pDoc->SetModifiedFlag();
 			pDoc->UpdateAllViews(NULL);
@@ -183,6 +198,8 @@ void CDrawingView::OnLButtonDblClk(UINT nFlags, CPoint point)
 	CScrollView::OnLButtonDblClk(nFlags, point);
 }
 
+// 右键双击的事件处理程序
+// 实现功能：修改当前鼠标指针之处的最上层图元对象属性
 void CDrawingView::OnRButtonDblClk(UINT nFlags, CPoint point)
 {
 	GET_LOGICAL_POINT_AND_PDOC
@@ -196,8 +213,9 @@ void CDrawingView::OnRButtonDblClk(UINT nFlags, CPoint point)
 			{
 				// 释放旧的图元对象
 				delete pDoc->m_Elements[i];
-				// 设置新的图元对象
-				CShape *new_pShape = CShape::DynamicCShapeObj(dlg.GetCurShapeValueFromDlg());
+				// 获取新的图元对象
+				CShape *new_pShape = dlg.GetCurShape()->Clone();
+				// 将当前遍历的对象指针指向新的图元对象
 				pDoc->m_Elements[i] = new_pShape;
 				pDoc->SetModifiedFlag();
 				pDoc->UpdateAllViews(NULL);
@@ -205,6 +223,5 @@ void CDrawingView::OnRButtonDblClk(UINT nFlags, CPoint point)
 			break;
 		}
 	}
-
 	CScrollView::OnRButtonDblClk(nFlags, point);
 }

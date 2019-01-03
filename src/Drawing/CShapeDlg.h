@@ -7,8 +7,8 @@ class CShapeDlg : public CDialogEx
 {
 	DECLARE_DYNAMIC(CShapeDlg)
 
-public:
-	CShapeDlg(CShape *pShape, CWnd *pParent = nullptr); // 标准构造函数
+  public:
+	CShapeDlg(CShape *cur_pShape, CWnd *pParent = nullptr); // 标准构造函数
 	virtual ~CShapeDlg();
 
 	// 对话框数据
@@ -19,11 +19,11 @@ public:
 	};
 #endif
 
-protected:
+  protected:
 	virtual void DoDataExchange(CDataExchange *pDX); // DDX/DDV 支持
 
 	DECLARE_MESSAGE_MAP()
-protected:
+  protected:
 	//===================控件类型=======================
 	// 选择图元类型的ComboBox
 	CComboBox m_comboBox_shapeType;
@@ -42,7 +42,7 @@ protected:
 	// 线型的ListBox
 	CListBox m_listBox_penType;
 	// 钢笔颜色的按钮
-	CButton m_btn_pen_color;
+	CButton m_btn_penColor;
 	// 画刷类型的ListBox
 	CListBox m_listBox_brushType;
 	// 画刷颜色的按钮
@@ -52,51 +52,68 @@ protected:
 	// 展示笔刷的颜色的编辑框
 	CEdit m_edit_brushColor;
 
-protected:
+  protected:
+	// 当前对话框选择的形状类型
 	ElementType m_Type;
+	// 原点 X 值
 	int m_x;
+	// 原点 Y 值
 	int m_y;
-	int m_wra;
-	int m_h;
-	CString m_text;
+	// 宽度，半径或旋转角度
 	int m_w;
+	// 高度
+	int m_h;
+	// 文本
+	CString m_text;
+	// 钢笔笔宽
+	int m_pen_width;
+	// 钢笔类型
 	int m_pen_type;
+	// 笔刷类型
 	int m_brush_type;
 
-protected:
-	COLORREF m_pen_color;
-	COLORREF m_brush_color;
+  protected:
+	// 边框颜色
+	COLORREF m_borderColor;
+	// 填充颜色
+	COLORREF m_fillColor;
 
-protected:
-	// 对话框类内部维护的图元基类指针
-	CShape *pShape;
-	// 对话框内部用来为维护每个类型的图元对象的指针数组
+  protected:
+	// 对话框类内部维护的图元基类指针，在调用GetCurShape函数之后将会指向当前形状类型的图元对象
+	CShape *cur_pShape;
+	// 对话框内部用来为维护每种形状类型的图元对象的指针数组
 	CShape *pShapes[SHAPE_TYPE_COUNT]{NULL};
 
-protected:
+  protected:
+	// 初始化对话框的事件处理程序
 	virtual BOOL OnInitDialog();
-
+	// 将图元对象的指定属性设置到对话框值类型的数据成员中
 	void CShapeDlg::SetShapeValueToDlg(
-			const CShape *shape,
-			bool setType = true,
-			bool setOrgX = true,
-			bool setOrgY = true,
-			bool setWidthEtc = true,
-			bool setHeight = true,
-			bool setText = true,
-			bool setPenWidth = true,
-			bool setPenType = true,
-			bool setPenColor = true,
-			bool setBrushType = true,
-			bool setBrushColo = true);
-
-	afx_msg void OnClickedPenColorButton();
-	afx_msg void OnClickedBrushColorButton();
+		const CShape *shape,
+		bool setType = true,
+		bool setOrgX = true,
+		bool setOrgY = true,
+		bool setWidthEtc = true,
+		bool setHeight = true,
+		bool setText = true,
+		bool setPenWidth = true,
+		bool setPenType = true,
+		bool setPenColor = true,
+		bool setBrushType = true,
+		bool setBrushColo = true);
+	// 边框颜色按钮点击事件处理程序
+	afx_msg void OnClickedBorderColorButton();
+	// 填充颜色按钮点击事件处理程序
+	afx_msg void OnClickedFillColorButton();
+	// 形状类型下拉列表框索引改变后的事件处理程序
 	afx_msg void OnSelchangeComboShapeType();
+	// 绘制控件颜色时的事件处理程序
 	afx_msg HBRUSH OnCtlColor(CDC *pDC, CWnd *pWnd, UINT nCtlColor);
 
-public:
-	// 获取图元基类对象指针，该指针将会随对话框对象的析构而无效
-	CShape *GetCurShapeValueFromDlg();
-	void UpdateUIEnabledStatus();
+  public:
+	// 获取当前选择的图元对象指针
+	// 注意：该指针将会随本对话框对象的析构而无效
+	CShape *GetCurShape();
+	// 更新界面上控件启用状态
+	void UpdateCtlEnabledStatus();
 };

@@ -25,13 +25,11 @@ IMPLEMENT_DYNCREATE(CDrawingDoc, CDocument)
 BEGIN_MESSAGE_MAP(CDrawingDoc, CDocument)
 END_MESSAGE_MAP()
 
-
 // CDrawingDoc 构造/析构
 
 CDrawingDoc::CDrawingDoc() noexcept
 {
 	// TODO: 在此添加一次性构造代码
-
 }
 
 CDrawingDoc::~CDrawingDoc()
@@ -41,16 +39,16 @@ CDrawingDoc::~CDrawingDoc()
 
 void CDrawingDoc::DeleteContents()
 {
-	// TODO:  在此添加专用代码和/或调用基类
+	// 遍历图元对象指针数组
 	for (int i = 0; i < m_Elements.GetSize(); i++)
 	{
-		CShape* p = (CShape*)m_Elements[i];
-		delete(p);
+		// 直接释放对象指针指向的对象
+		delete m_Elements[i];
 	}
+	// 清空图元对象指针数组
 	m_Elements.RemoveAll();
 
 	CDocument::DeleteContents();
-
 }
 
 BOOL CDrawingDoc::OnNewDocument()
@@ -64,21 +62,17 @@ BOOL CDrawingDoc::OnNewDocument()
 	return TRUE;
 }
 
-
-
-
 // CDrawingDoc 序列化
 
-void CDrawingDoc::Serialize(CArchive& ar)
+void CDrawingDoc::Serialize(CArchive &ar)
 {
+	// 当CArchive对象状态为储存时
 	if (ar.IsStoring())
 	{
-		// TODO: 在此添加存储代码
 		m_Elements.Serialize(ar);
 	}
 	else
 	{
-		// TODO: 在此添加加载代码
 		m_Elements.Serialize(ar);
 	}
 }
@@ -86,7 +80,7 @@ void CDrawingDoc::Serialize(CArchive& ar)
 #ifdef SHARED_HANDLERS
 
 // 缩略图的支持
-void CDrawingDoc::OnDrawThumbnail(CDC& dc, LPRECT lprcBounds)
+void CDrawingDoc::OnDrawThumbnail(CDC &dc, LPRECT lprcBounds)
 {
 	// 修改此代码以绘制文档数据
 	dc.FillSolidRect(lprcBounds, RGB(255, 255, 255));
@@ -94,14 +88,14 @@ void CDrawingDoc::OnDrawThumbnail(CDC& dc, LPRECT lprcBounds)
 	CString strText = _T("TODO: implement thumbnail drawing here");
 	LOGFONT lf;
 
-	CFont* pDefaultGUIFont = CFont::FromHandle((HFONT) GetStockObject(DEFAULT_GUI_FONT));
+	CFont *pDefaultGUIFont = CFont::FromHandle((HFONT)GetStockObject(DEFAULT_GUI_FONT));
 	pDefaultGUIFont->GetLogFont(&lf);
 	lf.lfHeight = 36;
 
 	CFont fontDraw;
 	fontDraw.CreateFontIndirect(&lf);
 
-	CFont* pOldFont = dc.SelectObject(&fontDraw);
+	CFont *pOldFont = dc.SelectObject(&fontDraw);
 	dc.DrawText(strText, lprcBounds, DT_CENTER | DT_WORDBREAK);
 	dc.SelectObject(pOldFont);
 }
@@ -117,7 +111,7 @@ void CDrawingDoc::InitializeSearchContent()
 	SetSearchContent(strSearchContent);
 }
 
-void CDrawingDoc::SetSearchContent(const CString& value)
+void CDrawingDoc::SetSearchContent(const CString &value)
 {
 	if (value.IsEmpty())
 	{
@@ -145,11 +139,10 @@ void CDrawingDoc::AssertValid() const
 	CDocument::AssertValid();
 }
 
-void CDrawingDoc::Dump(CDumpContext& dc) const
+void CDrawingDoc::Dump(CDumpContext &dc) const
 {
 	CDocument::Dump(dc);
 }
 #endif //_DEBUG
-
 
 // CDrawingDoc 命令
