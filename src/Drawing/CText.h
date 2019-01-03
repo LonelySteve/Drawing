@@ -2,10 +2,10 @@
 #include"CShape.h"
 
 /*ÎÄ±¾*/
-SHAPE_CLASS_START(CText, CString text, int height, int angle)
+SHAPE_CLASS_START(CText, SHAPE_PROPERTY_TEXT, SHAPE_PROPERTY_HEIGHT, SHAPE_PROPERTY_ANGLE)
 protected:
 	RECT rect;
-	CString text;
-	int height;
-	int angle;
+	SHAPE_PROPERTY_TEXT;
+	SHAPE_PROPERTY_HEIGHT;
+	SHAPE_PROPERTY_ANGLE;
 SHAPE_CLASS_END

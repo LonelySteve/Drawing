@@ -4,25 +4,16 @@
 
 IMPLEMENT_SERIAL(CCircle, CObject, 1)
 
-CCircle::CCircle()
-	:CShape(CIRCLE, 0, 0), radius(100)
-{
-}
+PREF_W_SHAPE_PROPERTOR(CCircle, radius)
 
-CCircle::CCircle(const CCircle & circle) : CShape(circle)
-{
-	circle.GetShapeValue(&Type, &OrgX, &OrgY, &radius, NULL, NULL);
-}
-
-CCircle::CCircle(int orgX, int orgY, int radius)
-	: CShape(CIRCLE, orgX, orgY), radius(radius)
-{
-}
-
-CCircle::CCircle(int orgX, int orgY, int radius, COLORREF fillColor, int fillType, COLORREF borderColor, int borderWidth, int borderType)
-	: CShape(CIRCLE, orgX, orgY, fillColor, fillType, borderColor, borderWidth, borderType), radius(radius)
-{
-}
+#pragma region ¹¹Ôìº¯Êý
+SHAPE_CLASS_NO_ARGS_CONSTRUCTOR(CCircle, CIRCLE, radius(100))
+SHAPE_CLASS_COPY_CONSTRUCTOR(CCircle, &radius, NULL, NULL)
+SHAPE_CLASS_SAMPLE_ARGS_CONSTRUCTOR_START(CCircle, int radius) 
+SHAPE_CLASS_SAMPLE_ARGS_CONSTRUCTOR_END(CIRCLE, radius(radius))
+SHAPE_CLASS_FULL_ARGS_CONSTRUCTOR_START(CCircle,int radius)
+SHAPE_CLASS_FULL_ARGS_CONSTRUCTOR_END(CIRCLE, radius(radius))
+#pragma endregion
 
 bool CCircle::IsMatched(CPoint pnt)
 {
@@ -42,18 +33,6 @@ void CCircle::Serialize(CArchive & ar)
 		ar >> radius;
 	}
 	CShape::Serialize(ar);
-}
-
-void CCircle::SetShapeValue(int orgX, int orgY, int widthEtc, CString text, int height)
-{
-	CShape::SetShapeValue(orgX, orgY, widthEtc, text, height);
-	this->radius = widthEtc;
-}
-
-void CCircle::GetShapeValue(ElementType * type, int * orgX, int * orgY, int * widthEtc, CString * text, int * height) const
-{
-	CShape::GetShapeValue(type, orgX, orgY, widthEtc, text, height);
-	PTR_ASSIGN(widthEtc, this->radius);
 }
 
 void CCircle::ToDraw(CDC * pDC)

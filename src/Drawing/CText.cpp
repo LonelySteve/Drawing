@@ -4,25 +4,26 @@
 
 IMPLEMENT_SERIAL(CText, CObject, 1)
 
-CText::CText()
-	: CShape(TEXT, 0, 0), text("这是一段示例文本"), height(25), angle(0), rect()
-{
-}
+SHAPE_GETTER_START(CText)
+PTR_ASSIGN(widthEtc, this->angle);
+PTR_ASSIGN(text, this->text);
+PTR_ASSIGN(height, this->height);
+SHAPE_PROPERTY_END
 
-CText::CText(const CText & text) : CShape(text)
-{
-	text.GetShapeValue(&Type, &OrgX, &OrgY, &angle, &this->text, &height);
-}
+SHAPE_SETTER_START(CText)
+this->text = text;
+this->height = height;
+this->angle = widthEtc;
+SHAPE_PROPERTY_END
 
-CText::CText(int orgX, int orgY, CString text, int height, int angle)
-	: CShape(TEXT, orgX, orgY), text(text), height(height), angle(angle)
-{
-}
-
-CText::CText(int orgX, int orgY, CString text, int height, int angle, COLORREF fillColor, int fillType, COLORREF borderColor, int borderWidth, int borderType)
-	: CShape(TEXT, orgX, orgY, fillColor, fillType, borderColor, borderWidth, borderType), text(text), height(height), angle(angle)
-{
-}
+#pragma region 构造函数
+SHAPE_CLASS_NO_ARGS_CONSTRUCTOR(CText, TEXT, text("这是一段示例文本"), height(25), angle(0), rect())
+SHAPE_CLASS_COPY_CONSTRUCTOR(CText, &angle, &this->text, &height)
+SHAPE_CLASS_SAMPLE_ARGS_CONSTRUCTOR_START(CText, CString text, int height, int angle)
+SHAPE_CLASS_SAMPLE_ARGS_CONSTRUCTOR_END(TEXT, text(text), height(height), angle(angle))
+SHAPE_CLASS_FULL_ARGS_CONSTRUCTOR_START(CText, CString text, int height, int angle)
+SHAPE_CLASS_FULL_ARGS_CONSTRUCTOR_END(TEXT, text(text), height(height), angle(angle))
+#pragma endregion
 
 bool CText::IsMatched(CPoint pnt)
 {
@@ -61,22 +62,6 @@ void CText::Serialize(CArchive & ar)
 	CShape::Serialize(ar);
 }
 
-void CText::SetShapeValue(int orgX, int orgY, int widthEtc, CString text, int height)
-{
-	CShape::SetShapeValue(orgX, orgY, widthEtc, text, height);
-	this->text = text;
-	this->height = height;
-	this->angle = widthEtc;
-}
-
-void CText::GetShapeValue(ElementType * type, int * orgX, int * orgY, int * widthEtc, CString * text, int * height) const
-{
-	CShape::GetShapeValue(type, orgX, orgY, widthEtc, text, height);
-	PTR_ASSIGN(widthEtc, this->angle);
-	PTR_ASSIGN(text, this->text);
-	PTR_ASSIGN(height, this->height);
-}
-
 void CText::ToDraw(CDC * pDC)
 {
 	CFont *OldFont, F;
@@ -103,9 +88,9 @@ void CText::ToDraw(CDC * pDC)
 	double offset_z = sqrt(pow(size.cx / 2.0, 2) + pow(size.cy / 2.0, 2));
 	double offset_y = sin(offset_rad) * offset_z;
 	double offset_x = cos(offset_rad) * offset_z;
-	double x, y;
-	x = OrgX - offset_x;
-	y = OrgY + offset_y;
+	LONG x, y;
+	x = static_cast<LONG>(OrgX - offset_x);
+	y = static_cast<LONG>(OrgY + offset_y);
 	rect.left = x;
 	rect.top = y;
 	rect.right = x + size.cx;

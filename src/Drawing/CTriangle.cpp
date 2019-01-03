@@ -4,25 +4,17 @@
 
 IMPLEMENT_SERIAL(CTriangle, CObject, 1)
 
-CTriangle::CTriangle() :CShape(TRIANGLE, 0, 0), width(100)
-{
-}
+PREF_W_SHAPE_PROPERTOR(CTriangle, width)
 
-CTriangle::CTriangle(const CTriangle & triangle) : CShape(triangle)
-{
-	triangle.GetShapeValue(&Type, &OrgX, &OrgY, &width, NULL, NULL); 
-}
-
-CTriangle::CTriangle(int orgX, int orgY, int width)
-	: CShape(TRIANGLE, orgX, orgY), width(width)
-{
-}
-
-CTriangle::CTriangle(int orgX, int orgY, int width, COLORREF fillColor, int fillType, COLORREF borderColor, int borderWidth, int borderType)
-	: CShape(TRIANGLE, orgX, orgY, fillColor, fillType, borderColor, borderWidth, borderType), width(width)
-{
-}
-
+#pragma region 构造函数
+SHAPE_CLASS_NO_ARGS_CONSTRUCTOR(CTriangle, TRIANGLE, width(100))
+SHAPE_CLASS_COPY_CONSTRUCTOR(CTriangle, &width, NULL, NULL)
+SHAPE_CLASS_SAMPLE_ARGS_CONSTRUCTOR_START(CTriangle, int width)
+SHAPE_CLASS_SAMPLE_ARGS_CONSTRUCTOR_END(TRIANGLE, width(width))
+SHAPE_CLASS_FULL_ARGS_CONSTRUCTOR_START(CTriangle, int width)
+SHAPE_CLASS_FULL_ARGS_CONSTRUCTOR_END(TRIANGLE, width(width))
+#pragma endregion
+ 
 bool CTriangle::IsMatched(CPoint pnt)
 {
 	// 这其实就是个线性规划问题...
@@ -34,7 +26,6 @@ bool CTriangle::IsMatched(CPoint pnt)
 	return pnt.y >= -sqrt_3 * pnt.x + b1
 		&& pnt.y >= sqrt_3 * pnt.x + b2
 		&& pnt.y <= OrgY + sqrt_3 * width / 6;
-
 }
 
 void CTriangle::Serialize(CArchive & ar)
@@ -48,17 +39,6 @@ void CTriangle::Serialize(CArchive & ar)
 		ar >> width;
 	}
 	CShape::Serialize(ar);
-}
-
-void CTriangle::SetShapeValue(int orgX, int orgY, int widthEtc, CString text, int height)
-{
-	CShape::SetShapeValue(orgX, orgY, widthEtc, text, height);
-	this->width = widthEtc;
-}
-void CTriangle::GetShapeValue(ElementType * type, int * orgX, int * orgY, int * widthEtc, CString * text, int * height) const
-{
-	CShape::GetShapeValue(type, orgX, orgY, widthEtc, text, height);
-	PTR_ASSIGN(widthEtc, this->width);
 }
 
 void CTriangle::ToDraw(CDC * pDC)

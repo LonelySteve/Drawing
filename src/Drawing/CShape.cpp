@@ -113,7 +113,6 @@ void CShape::SetShapeValue(int orgX, int orgY, int widthEtc, CString text, int h
 
 void CShape::GetShapeValue(ElementType * type, int * orgX, int * orgY, int * widthEtc, CString * text, int * height) const
 {
-
 	PTR_ASSIGN(type, Type);
 	PTR_ASSIGN(orgX, OrgX);
 	PTR_ASSIGN(orgY, OrgY);

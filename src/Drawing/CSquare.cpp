@@ -4,26 +4,16 @@
 
 IMPLEMENT_SERIAL(CSquare, CObject, 1)
 
-CSquare::CSquare()
-	: CShape(SQUARE, 0, 0), width(100)
-{
+PREF_W_SHAPE_PROPERTOR(CSquare, width)
 
-}
-
-CSquare::CSquare(const CSquare & square) : CShape(square)
-{
-	square.GetShapeValue(&Type, &OrgX, &OrgY, &width, NULL, NULL);
-}
-
-CSquare::CSquare(int orgX, int orgY, int width)
-	: CShape(SQUARE, orgX, orgY), width(width)
-{
-}
-
-CSquare::CSquare(int orgX, int orgY, int width, COLORREF fillColor, int fillType, COLORREF borderColor, int borderWidth, int borderType)
-	: CShape(SQUARE, orgX, orgY, fillColor, fillType, borderColor, borderWidth, borderType), width(width)
-{
-}
+#pragma region ¹¹Ôìº¯Êý
+SHAPE_CLASS_NO_ARGS_CONSTRUCTOR(CSquare, SQUARE, width(100))
+SHAPE_CLASS_COPY_CONSTRUCTOR(CSquare, &width, NULL, NULL)
+SHAPE_CLASS_SAMPLE_ARGS_CONSTRUCTOR_START(CSquare, int width)
+SHAPE_CLASS_SAMPLE_ARGS_CONSTRUCTOR_END(SQUARE, width(width))
+SHAPE_CLASS_FULL_ARGS_CONSTRUCTOR_START(CSquare, int width)
+SHAPE_CLASS_FULL_ARGS_CONSTRUCTOR_END(SQUARE, width(width))
+#pragma endregion
 
 bool CSquare::IsMatched(CPoint pnt)
 {
@@ -48,18 +38,6 @@ void CSquare::Serialize(CArchive & ar)
 		ar >> width;
 	}
 	CShape::Serialize(ar);
-}
-
-void CSquare::SetShapeValue(int orgX, int orgY, int widthEtc, CString text, int height)
-{
-	CShape::SetShapeValue(orgX, orgY, widthEtc, text, height);
-	this->width = widthEtc;
-}
-
-void CSquare::GetShapeValue(ElementType * type, int * orgX, int * orgY, int * widthEtc, CString * text, int * height) const
-{
-	CShape::GetShapeValue(type, orgX, orgY, widthEtc, text, height);
-	PTR_ASSIGN(widthEtc, this->width);
 }
 
 void CSquare::ToDraw(CDC * pDC)

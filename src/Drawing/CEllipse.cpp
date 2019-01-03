@@ -4,25 +4,16 @@
 
 IMPLEMENT_SERIAL(CEllipse, CObject, 1)
 
-CEllipse::CEllipse()
-	: CShape(ELLIPSE, 0, 0), width(200), height(100)
-{
-}
+PREF_WH_SHAPE_PROPERTOR(CEllipse)
 
-CEllipse::CEllipse(const CEllipse & ellipse) : CShape(ellipse)
-{
-	ellipse.GetShapeValue(&Type, &OrgX, &OrgY, &width, NULL, &height);
-}
-
-CEllipse::CEllipse(int orgX, int orgY, int width, int height)
-	: CShape(ELLIPSE, orgX, orgY), width(width), height(height)
-{
-}
-
-CEllipse::CEllipse(int orgX, int orgY, int width, int height, COLORREF fillColor, int fillType, COLORREF borderColor, int borderWidth, int borderType)
-	: CShape(ELLIPSE, orgX, orgY, fillColor, fillType, borderColor, borderWidth, borderType), width(width), height(height)
-{
-}
+#pragma region ¹¹Ôìº¯Êý
+SHAPE_CLASS_NO_ARGS_CONSTRUCTOR(CEllipse, ELLIPSE, width(200), height(100))
+SHAPE_CLASS_COPY_CONSTRUCTOR(CEllipse, &width, NULL, &height)
+SHAPE_CLASS_SAMPLE_ARGS_CONSTRUCTOR_START(CEllipse, int width, int height)
+SHAPE_CLASS_SAMPLE_ARGS_CONSTRUCTOR_END(ELLIPSE, width(width), height(height))
+SHAPE_CLASS_FULL_ARGS_CONSTRUCTOR_START(CEllipse, int width, int height)
+SHAPE_CLASS_FULL_ARGS_CONSTRUCTOR_END(ELLIPSE, width(width), height(height))
+#pragma endregion
 
 bool CEllipse::IsMatched(CPoint pnt)
 {
@@ -47,21 +38,9 @@ void CEllipse::Serialize(CArchive & ar)
 	}
 	CShape::Serialize(ar);
 }
-void CEllipse::SetShapeValue(int orgX, int orgY, int widthEtc, CString text, int height)
-{
-	CShape::SetShapeValue(orgX, orgY, widthEtc, text, height);
-	this->width = widthEtc;
-	this->height = height;
-}
-void CEllipse::GetShapeValue(ElementType * type, int * orgX, int * orgY, int * widthEtc, CString * text, int * height) const
-{
-	CShape::GetShapeValue(type, orgX, orgY, widthEtc, text, height);
-	PTR_ASSIGN(widthEtc, this->width);
-	PTR_ASSIGN(height, this->height);
-}
  
+
 void CEllipse::ToDraw(CDC * pDC)
 {
 	pDC->Ellipse(OrgX - width / 2, OrgY - height / 2, OrgX + width / 2, OrgY + height / 2);
 }
- 
