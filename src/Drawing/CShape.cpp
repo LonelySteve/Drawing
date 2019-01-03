@@ -3,9 +3,9 @@
 #include <math.h>
 #include "util.h"
 
-CShape* CShape::DynamicCShapeObj(const CShape * shape, bool copy)
+CShape *CShape::DynamicCShapeObj(const CShape *shape, bool copy)
 {
-#define TM_0(className) copy ? new className((className&)*shape) : new className()
+#define TM_0(className) copy ? new className((className &)*shape) : new className()
 	PTR_NULL_RETURN(shape, NULL);
 	switch (shape->GetShapeType())
 	{
@@ -26,7 +26,7 @@ CShape* CShape::DynamicCShapeObj(const CShape * shape, bool copy)
 	return NULL;
 }
 
-CShape::CShape(const CShape & shape)
+CShape::CShape(const CShape &shape)
 {
 	shape.GetBrush(&FillColor, &FillType);
 	shape.GetPen(&BorderColor, &BorderWidth, &BorderType);
@@ -34,7 +34,7 @@ CShape::CShape(const CShape & shape)
 }
 
 CShape::CShape(ElementType type, int orgX, int orgY)
-	:Type(type), OrgX(orgX), OrgY(orgY)
+	: Type(type), OrgX(orgX), OrgY(orgY)
 {
 }
 
@@ -50,12 +50,12 @@ void CShape::SetPen(COLORREF color, int width, int type)
 	BorderType = type;
 }
 
-bool CShape::GetPen(CPen & pen) const
+bool CShape::GetPen(CPen &pen) const
 {
 	return pen.CreatePen(BorderType, BorderWidth, BorderColor);
 }
 
-void CShape::GetPen(COLORREF * color, int * width, int * type) const
+void CShape::GetPen(COLORREF *color, int *width, int *type) const
 {
 	PTR_ASSIGN(color, this->BorderColor);
 	PTR_ASSIGN(width, this->BorderWidth);
@@ -68,13 +68,12 @@ void CShape::SetBrush(COLORREF color, int type)
 	FillType = type;
 }
 
-bool CShape::GetBrush(CBrush & brush) const
+bool CShape::GetBrush(CBrush &brush) const
 {
-	return FillType >= HS_HORIZONTAL && FillType <= HS_DIAGCROSS ?
-		brush.CreateHatchBrush(FillType, FillColor) : brush.CreateSolidBrush(FillColor);
+	return FillType >= HS_HORIZONTAL && FillType <= HS_DIAGCROSS ? brush.CreateHatchBrush(FillType, FillColor) : brush.CreateSolidBrush(FillColor);
 }
 
-void CShape::GetBrush(COLORREF * color, int * type) const
+void CShape::GetBrush(COLORREF *color, int *type) const
 {
 	PTR_ASSIGN(color, this->FillColor);
 	PTR_ASSIGN(type, this->FillType);
@@ -85,7 +84,7 @@ ElementType CShape::GetShapeType() const
 	return Type;
 }
 
-void CShape::Draw(CDC * pDC)
+void CShape::Draw(CDC *pDC)
 {
 	CPen pen, *pOldPen;
 	GetPen(pen);
@@ -100,7 +99,7 @@ void CShape::Draw(CDC * pDC)
 	pDC->SelectObject(pOldBrush);
 #ifdef DEBUG
 	// 绘制反色原点
-	RECT rect{ OrgX - 3,OrgY - 3,OrgX + 3,OrgY + 3 };
+	RECT rect{OrgX - 3, OrgY - 3, OrgX + 3, OrgY + 3};
 	pDC->InvertRect(&rect);
 #endif // DEBUG
 }
@@ -111,14 +110,14 @@ void CShape::SetShapeValue(int orgX, int orgY, int widthEtc, CString text, int h
 	OrgY = orgY;
 }
 
-void CShape::GetShapeValue(ElementType * type, int * orgX, int * orgY, int * widthEtc, CString * text, int * height) const
+void CShape::GetShapeValue(ElementType *type, int *orgX, int *orgY, int *widthEtc, CString *text, int *height) const
 {
 	PTR_ASSIGN(type, Type);
 	PTR_ASSIGN(orgX, OrgX);
 	PTR_ASSIGN(orgY, OrgY);
 }
 
-void CShape::Serialize(CArchive & ar)
+void CShape::Serialize(CArchive &ar)
 {
 	if (ar.IsStoring())
 	{
@@ -127,8 +126,8 @@ void CShape::Serialize(CArchive & ar)
 		ar << BorderColor;  // 边界颜色
 		ar << BorderType;   // 边框类型
 		ar << BorderWidth;  // 边界宽度
-		ar << FillColor;    // 填充颜色
-		ar << FillType;     // 填充类型
+		ar << FillColor;	// 填充颜色
+		ar << FillType;		// 填充类型
 	}
 	else
 	{

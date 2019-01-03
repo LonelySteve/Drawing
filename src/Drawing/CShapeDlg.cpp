@@ -11,16 +11,8 @@
 
 IMPLEMENT_DYNAMIC(CShapeDlg, CDialogEx)
 
-CShapeDlg::CShapeDlg(CShape* pShape, CWnd* pParent /*=nullptr*/)
-	: CDialogEx(IDD_CSHAPE_DLG, pParent), pShape(pShape)
-	, m_x(0)
-	, m_y(0)
-	, m_wra(0)
-	, m_h(0)
-	, m_text(_T(""))
-	, m_w(0)
-	, m_pen_type(0)
-	, m_brush_type(0)
+CShapeDlg::CShapeDlg(CShape *pShape, CWnd *pParent /*=nullptr*/)
+	: CDialogEx(IDD_CSHAPE_DLG, pParent), pShape(pShape), m_x(0), m_y(0), m_wra(0), m_h(0), m_text(_T("")), m_w(0), m_pen_type(0), m_brush_type(0)
 {
 }
 
@@ -34,7 +26,7 @@ CShapeDlg::~CShapeDlg()
 	pShape = NULL;
 }
 
-void CShapeDlg::DoDataExchange(CDataExchange* pDX)
+void CShapeDlg::DoDataExchange(CDataExchange *pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
 	DDX_Control(pDX, IDC_COMBO1, m_comboBox_shapeType);
@@ -64,14 +56,12 @@ void CShapeDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_EDIT8, m_edit_brushColor);
 }
 
-
 BEGIN_MESSAGE_MAP(CShapeDlg, CDialogEx)
-	ON_WM_CTLCOLOR()
-	ON_BN_CLICKED(IDC_BUTTON1, &CShapeDlg::OnClickedPenColorButton)
-	ON_BN_CLICKED(IDC_BUTTON2, &CShapeDlg::OnClickedBrushColorButton)
-	ON_CBN_SELCHANGE(IDC_COMBO1, &CShapeDlg::OnSelchangeComboShapeType)
+ON_WM_CTLCOLOR()
+ON_BN_CLICKED(IDC_BUTTON1, &CShapeDlg::OnClickedPenColorButton)
+ON_BN_CLICKED(IDC_BUTTON2, &CShapeDlg::OnClickedBrushColorButton)
+ON_CBN_SELCHANGE(IDC_COMBO1, &CShapeDlg::OnSelchangeComboShapeType)
 END_MESSAGE_MAP()
-
 
 // CShapeDlg 消息处理程序
 BOOL CShapeDlg::OnInitDialog()
@@ -96,7 +86,7 @@ BOOL CShapeDlg::OnInitDialog()
 	m_listBox_brushType.AddString(_T("HS_SOLID"));
 
 	// 为每种图元对象建立单独的对象
-#define NEW_SHAPE(index,className) PTR_VAL_ASSIGN(pShapes[index],new className())
+#define NEW_SHAPE(index, className) PTR_VAL_ASSIGN(pShapes[index], new className())
 
 	NEW_SHAPE(0, CSquare);
 	NEW_SHAPE(1, CRectangle);
@@ -105,7 +95,9 @@ BOOL CShapeDlg::OnInitDialog()
 	NEW_SHAPE(4, CTriangle);
 	NEW_SHAPE(5, CText);
 
-	if (pShape != NULL)    // 这个时候是修改图元对象
+#undef NEW_SHAPE
+
+	if (pShape != NULL) // 这个时候是修改图元对象
 	{
 		ElementType type = pShape->GetShapeType();
 		delete pShapes[type];
@@ -122,14 +114,13 @@ BOOL CShapeDlg::OnInitDialog()
 	UpdateUIEnabledStatus();
 
 	UpdateData(FALSE);
-	
 
-	return TRUE;  // return TRUE unless you set the focus to a control
-				  // 异常: OCX 属性页应返回 FALSE
+	return TRUE; // return TRUE unless you set the focus to a control
+				 // 异常: OCX 属性页应返回 FALSE
 }
 
 void CShapeDlg::SetShapeValueToDlg(
-	const CShape * shape,
+	const CShape *shape,
 	bool setType,
 	bool setOrgX,
 	bool setOrgY,
@@ -140,8 +131,7 @@ void CShapeDlg::SetShapeValueToDlg(
 	bool setPenType,
 	bool setPenColor,
 	bool setBrushType,
-	bool setBrushColor
-)
+	bool setBrushColor)
 {
 	PTR_NULL_RETURN(shape);
 	ElementType type;
@@ -169,7 +159,7 @@ void CShapeDlg::SetShapeValueToDlg(
 	IF_ASSIGN(setBrushColor, m_brush_color, brushColor);
 }
 
-HBRUSH CShapeDlg::OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor)
+HBRUSH CShapeDlg::OnCtlColor(CDC *pDC, CWnd *pWnd, UINT nCtlColor)
 {
 	HBRUSH hbr = CDialogEx::OnCtlColor(pDC, pWnd, nCtlColor);
 
@@ -185,7 +175,7 @@ HBRUSH CShapeDlg::OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor)
 	return hbr;
 }
 
-CShape* CShapeDlg::GetCurShapeValueFromDlg()
+CShape *CShapeDlg::GetCurShapeValueFromDlg()
 {
 	pShapes[m_Type]->SetBrush(m_brush_color, m_brush_type);
 	pShapes[m_Type]->SetPen(m_pen_color, m_w, m_pen_type);
@@ -277,4 +267,3 @@ void CShapeDlg::OnSelchangeComboShapeType()
 	m_edit_brushColor.UpdateWindow();
 #pragma endregion
 }
-

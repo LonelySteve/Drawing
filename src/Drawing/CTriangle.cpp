@@ -14,7 +14,7 @@ SHAPE_CLASS_SAMPLE_ARGS_CONSTRUCTOR_END(TRIANGLE, width(width))
 SHAPE_CLASS_FULL_ARGS_CONSTRUCTOR_START(CTriangle, int width)
 SHAPE_CLASS_FULL_ARGS_CONSTRUCTOR_END(TRIANGLE, width(width))
 #pragma endregion
- 
+
 bool CTriangle::IsMatched(CPoint pnt)
 {
 	// 这其实就是个线性规划问题...
@@ -23,12 +23,10 @@ bool CTriangle::IsMatched(CPoint pnt)
 	double b1 = OrgY - width / sqrt_3 + OrgX * sqrt_3;
 	double b2 = OrgY - OrgX * sqrt_3 - sqrt_3 * width / 3;
 
-	return pnt.y >= -sqrt_3 * pnt.x + b1
-		&& pnt.y >= sqrt_3 * pnt.x + b2
-		&& pnt.y <= OrgY + sqrt_3 * width / 6;
+	return pnt.y >= -sqrt_3 * pnt.x + b1 && pnt.y >= sqrt_3 * pnt.x + b2 && pnt.y <= OrgY + sqrt_3 * width / 6;
 }
 
-void CTriangle::Serialize(CArchive & ar)
+void CTriangle::Serialize(CArchive &ar)
 {
 	if (ar.IsStoring())
 	{
@@ -41,13 +39,12 @@ void CTriangle::Serialize(CArchive & ar)
 	CShape::Serialize(ar);
 }
 
-void CTriangle::ToDraw(CDC * pDC)
+void CTriangle::ToDraw(CDC *pDC)
 {
 	POINT ps[3]{
 		POINT{OrgX - width / 2, long(OrgY + width / (2 * sqrt(3)))},
-		POINT{OrgX + width / 2,long(OrgY + width / (2 * sqrt(3)))},
-		POINT{OrgX,long(OrgY - width / sqrt(3))}
-	};
+		POINT{OrgX + width / 2, long(OrgY + width / (2 * sqrt(3)))},
+		POINT{OrgX, long(OrgY - width / sqrt(3))}};
 
 	pDC->Polygon(ps, 3);
 }

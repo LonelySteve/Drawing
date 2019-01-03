@@ -9,9 +9,9 @@ PREF_W_SHAPE_PROPERTOR(CCircle, radius)
 #pragma region ¹¹Ôìº¯Êý
 SHAPE_CLASS_NO_ARGS_CONSTRUCTOR(CCircle, CIRCLE, radius(100))
 SHAPE_CLASS_COPY_CONSTRUCTOR(CCircle, &radius, NULL, NULL)
-SHAPE_CLASS_SAMPLE_ARGS_CONSTRUCTOR_START(CCircle, int radius) 
+SHAPE_CLASS_SAMPLE_ARGS_CONSTRUCTOR_START(CCircle, int radius)
 SHAPE_CLASS_SAMPLE_ARGS_CONSTRUCTOR_END(CIRCLE, radius(radius))
-SHAPE_CLASS_FULL_ARGS_CONSTRUCTOR_START(CCircle,int radius)
+SHAPE_CLASS_FULL_ARGS_CONSTRUCTOR_START(CCircle, int radius)
 SHAPE_CLASS_FULL_ARGS_CONSTRUCTOR_END(CIRCLE, radius(radius))
 #pragma endregion
 
@@ -22,7 +22,7 @@ bool CCircle::IsMatched(CPoint pnt)
 	return dist <= radius;
 }
 
-void CCircle::Serialize(CArchive & ar)
+void CCircle::Serialize(CArchive &ar)
 {
 	if (ar.IsStoring())
 	{
@@ -35,7 +35,7 @@ void CCircle::Serialize(CArchive & ar)
 	CShape::Serialize(ar);
 }
 
-void CCircle::ToDraw(CDC * pDC)
+void CCircle::ToDraw(CDC *pDC)
 {
 	pDC->Ellipse(OrgX - radius, OrgY - radius, OrgX + radius, OrgY + radius);
 }

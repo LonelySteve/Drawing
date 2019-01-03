@@ -7,20 +7,23 @@ class CShapeDlg : public CDialogEx
 {
 	DECLARE_DYNAMIC(CShapeDlg)
 
-  public:
+public:
 	CShapeDlg(CShape *pShape, CWnd *pParent = nullptr); // 标准构造函数
 	virtual ~CShapeDlg();
 
 	// 对话框数据
 #ifdef AFX_DESIGN_TIME
-	enum { IDD = IDD_CSHAPE_DLG };
+	enum
+	{
+		IDD = IDD_CSHAPE_DLG
+	};
 #endif
 
 protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV 支持
+	virtual void DoDataExchange(CDataExchange *pDX); // DDX/DDV 支持
 
 	DECLARE_MESSAGE_MAP()
-  protected:
+protected:
 	//===================控件类型=======================
 	// 选择图元类型的ComboBox
 	CComboBox m_comboBox_shapeType;
@@ -48,7 +51,8 @@ protected:
 	CEdit m_edit_penColor;
 	// 展示笔刷的颜色的编辑框
 	CEdit m_edit_brushColor;
-  protected:
+
+protected:
 	ElementType m_Type;
 	int m_x;
 	int m_y;
@@ -58,37 +62,40 @@ protected:
 	int m_w;
 	int m_pen_type;
 	int m_brush_type;
-  protected:
+
+protected:
 	COLORREF m_pen_color;
 	COLORREF m_brush_color;
-  protected:
+
+protected:
 	// 对话框类内部维护的图元基类指针
 	CShape *pShape;
 	// 对话框内部用来为维护每个类型的图元对象的指针数组
 	CShape *pShapes[SHAPE_TYPE_COUNT]{NULL};
 
-  protected:
+protected:
 	virtual BOOL OnInitDialog();
 
 	void CShapeDlg::SetShapeValueToDlg(
-		const CShape *shape,
-		bool setType = true,
-		bool setOrgX = true,
-		bool setOrgY = true,
-		bool setWidthEtc = true,
-		bool setHeight = true,
-		bool setText = true,
-		bool setPenWidth = true,
-		bool setPenType = true,
-		bool setPenColor = true,
-		bool setBrushType = true,
-		bool setBrushColo = true);
+			const CShape *shape,
+			bool setType = true,
+			bool setOrgX = true,
+			bool setOrgY = true,
+			bool setWidthEtc = true,
+			bool setHeight = true,
+			bool setText = true,
+			bool setPenWidth = true,
+			bool setPenType = true,
+			bool setPenColor = true,
+			bool setBrushType = true,
+			bool setBrushColo = true);
 
 	afx_msg void OnClickedPenColorButton();
 	afx_msg void OnClickedBrushColorButton();
 	afx_msg void OnSelchangeComboShapeType();
-	afx_msg HBRUSH OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor);
-  public:
+	afx_msg HBRUSH OnCtlColor(CDC *pDC, CWnd *pWnd, UINT nCtlColor);
+
+public:
 	// 获取图元基类对象指针，该指针将会随对话框对象的析构而无效
 	CShape *GetCurShapeValueFromDlg();
 	void UpdateUIEnabledStatus();

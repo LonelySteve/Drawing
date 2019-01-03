@@ -28,24 +28,23 @@ SHAPE_CLASS_FULL_ARGS_CONSTRUCTOR_END(TEXT, text(text), height(height), angle(an
 bool CText::IsMatched(CPoint pnt)
 {
 	// 获取不旋转时，TEXT所占用的矩形区域四点
-	POINT lt{ rect.left,rect.top };
-	POINT lb{ rect.left,rect.bottom };
-	POINT rt{ rect.right,rect.top };
-	POINT rb{ rect.right,rect.bottom };
+	POINT lt{rect.left, rect.top};
+	POINT lb{rect.left, rect.bottom};
+	POINT rt{rect.right, rect.top};
+	POINT rb{rect.right, rect.bottom};
 
 	POINT point[4]{
-		RotationPoint(lt,lt,angle),
-		RotationPoint(lt,rt,angle),
-		RotationPoint(lt,rb,angle),
-		RotationPoint(lt,lb,angle)
-	};
+		RotationPoint(lt, lt, angle),
+		RotationPoint(lt, rt, angle),
+		RotationPoint(lt, rb, angle),
+		RotationPoint(lt, lb, angle)};
 
 	CRgn rgn;
 	rgn.CreatePolygonRgn(point, 4, ALTERNATE);
 	return rgn.PtInRegion(pnt);
 }
 
-void CText::Serialize(CArchive & ar)
+void CText::Serialize(CArchive &ar)
 {
 	if (ar.IsStoring())
 	{
@@ -62,7 +61,7 @@ void CText::Serialize(CArchive & ar)
 	CShape::Serialize(ar);
 }
 
-void CText::ToDraw(CDC * pDC)
+void CText::ToDraw(CDC *pDC)
 {
 	CFont *OldFont, F;
 	F.CreateFontW(

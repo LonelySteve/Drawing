@@ -38,7 +38,6 @@ void CEllipse::Serialize(CArchive & ar)
 	}
 	CShape::Serialize(ar);
 }
- 
 
 void CEllipse::ToDraw(CDC * pDC)
 {

@@ -12,7 +12,6 @@
 #include "DrawingDoc.h"
 #include "DrawingView.h"
 
-
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -26,14 +25,14 @@
 IMPLEMENT_DYNCREATE(CDrawingView, CScrollView)
 
 BEGIN_MESSAGE_MAP(CDrawingView, CScrollView)
-	// 标准打印命令
-	ON_COMMAND(ID_FILE_PRINT, &CScrollView::OnFilePrint)
-	ON_COMMAND(ID_FILE_PRINT_DIRECT, &CScrollView::OnFilePrint)
-	ON_COMMAND(ID_FILE_PRINT_PREVIEW, &CDrawingView::OnFilePrintPreview)
-	ON_WM_RBUTTONUP()
-	ON_WM_LBUTTONDOWN()
-	ON_WM_LBUTTONDBLCLK()
-	ON_WM_RBUTTONDBLCLK()
+// 标准打印命令
+ON_COMMAND(ID_FILE_PRINT, &CScrollView::OnFilePrint)
+ON_COMMAND(ID_FILE_PRINT_DIRECT, &CScrollView::OnFilePrint)
+ON_COMMAND(ID_FILE_PRINT_PREVIEW, &CDrawingView::OnFilePrintPreview)
+ON_WM_RBUTTONUP()
+ON_WM_LBUTTONDOWN()
+ON_WM_LBUTTONDBLCLK()
+ON_WM_RBUTTONDBLCLK()
 END_MESSAGE_MAP()
 
 // CDrawingView 构造/析构
@@ -41,14 +40,13 @@ END_MESSAGE_MAP()
 CDrawingView::CDrawingView() noexcept
 {
 	// TODO: 在此处添加构造代码
-
 }
 
 CDrawingView::~CDrawingView()
 {
 }
 
-BOOL CDrawingView::PreCreateWindow(CREATESTRUCT& cs)
+BOOL CDrawingView::PreCreateWindow(CREATESTRUCT &cs)
 {
 	// TODO: 在此处通过修改
 	//  CREATESTRUCT cs 来修改窗口类或样式
@@ -58,9 +56,9 @@ BOOL CDrawingView::PreCreateWindow(CREATESTRUCT& cs)
 
 // CDrawingView 绘图
 
-void CDrawingView::OnDraw(CDC* pDC)
+void CDrawingView::OnDraw(CDC *pDC)
 {
-	CDrawingDoc* pDoc = GetDocument();
+	CDrawingDoc *pDoc = GetDocument();
 	ASSERT_VALID(pDoc);
 	if (!pDoc)
 		return;
@@ -68,10 +66,9 @@ void CDrawingView::OnDraw(CDC* pDC)
 	// TODO: 在此处为本机数据添加绘制代码
 	for (int i = 0; i < pDoc->m_Elements.GetCount(); i++)
 	{
-		CShape* p = (CShape*)pDoc->m_Elements[i];
+		CShape *p = (CShape *)pDoc->m_Elements[i];
 		p->Draw(pDC);
 	}
-
 }
 
 void CDrawingView::OnInitialUpdate()
@@ -84,9 +81,7 @@ void CDrawingView::OnInitialUpdate()
 	SetScrollSizes(MM_TEXT, sizeTotal);
 }
 
-
 // CDrawingView 打印
-
 
 void CDrawingView::OnFilePrintPreview()
 {
@@ -95,18 +90,18 @@ void CDrawingView::OnFilePrintPreview()
 #endif
 }
 
-BOOL CDrawingView::OnPreparePrinting(CPrintInfo* pInfo)
+BOOL CDrawingView::OnPreparePrinting(CPrintInfo *pInfo)
 {
 	// 默认准备
 	return DoPreparePrinting(pInfo);
 }
 
-void CDrawingView::OnBeginPrinting(CDC* /*pDC*/, CPrintInfo* /*pInfo*/)
+void CDrawingView::OnBeginPrinting(CDC * /*pDC*/, CPrintInfo * /*pInfo*/)
 {
 	// TODO: 添加额外的打印前进行的初始化过程
 }
 
-void CDrawingView::OnEndPrinting(CDC* /*pDC*/, CPrintInfo* /*pInfo*/)
+void CDrawingView::OnEndPrinting(CDC * /*pDC*/, CPrintInfo * /*pInfo*/)
 {
 	// TODO: 添加打印后进行的清理过程
 }
@@ -117,8 +112,6 @@ void CDrawingView::OnRButtonUp(UINT /* nFlags */, CPoint point)
 	OnContextMenu(this, point);
 }
 
-
-
 // CDrawingView 诊断
 
 #ifdef _DEBUG
@@ -127,34 +120,34 @@ void CDrawingView::AssertValid() const
 	CScrollView::AssertValid();
 }
 
-void CDrawingView::Dump(CDumpContext& dc) const
+void CDrawingView::Dump(CDumpContext &dc) const
 {
 	CScrollView::Dump(dc);
 }
 
-CDrawingDoc* CDrawingView::GetDocument() const // 非调试版本是内联的
+CDrawingDoc *CDrawingView::GetDocument() const // 非调试版本是内联的
 {
 	ASSERT(m_pDocument->IsKindOf(RUNTIME_CLASS(CDrawingDoc)));
-	return (CDrawingDoc*)m_pDocument;
+	return (CDrawingDoc *)m_pDocument;
 }
 #endif //_DEBUG
 
-
 // CDrawingView 消息处理程序
 
-#define GET_LOGICAL_POINT_AND_PDOC \
-CDrawingDoc* pDoc = GetDocument(); \
-ASSERT_VALID(pDoc); \
-if (!pDoc)	return; \
-CClientDC dc(this); \
-CPoint pntLogical = point; \
-OnPrepareDC(&dc); \
-dc.DPtoLP(&pntLogical);//DP->LP进行转换
+#define GET_LOGICAL_POINT_AND_PDOC     \
+	CDrawingDoc *pDoc = GetDocument(); \
+	ASSERT_VALID(pDoc);                \
+	if (!pDoc)                         \
+		return;                        \
+	CClientDC dc(this);                \
+	CPoint pntLogical = point;         \
+	OnPrepareDC(&dc);                  \
+	dc.DPtoLP(&pntLogical); //DP->LP进行转换
 
 void CDrawingView::OnLButtonDown(UINT nFlags, CPoint point)
 {
 	// TODO:  在此添加消息处理程序代码和/或调用默认值
-	if ((nFlags&MK_CONTROL) == MK_CONTROL)//Ctrl键按下
+	if ((nFlags & MK_CONTROL) == MK_CONTROL) //Ctrl键按下
 	{
 		GET_LOGICAL_POINT_AND_PDOC
 
@@ -163,16 +156,14 @@ void CDrawingView::OnLButtonDown(UINT nFlags, CPoint point)
 		CShapeDlg dlg(&sample);
 		if (dlg.DoModal() == IDOK)
 		{
-			CShape * new_pShape = CShape::DynamicCShapeObj(dlg.GetCurShapeValueFromDlg());
+			CShape *new_pShape = CShape::DynamicCShapeObj(dlg.GetCurShapeValueFromDlg());
 			pDoc->m_Elements.Add(new_pShape);
 		}
 		pDoc->SetModifiedFlag();
 		pDoc->UpdateAllViews(NULL);
 	}
 	CScrollView::OnLButtonDown(nFlags, point);
-
 }
-
 
 void CDrawingView::OnLButtonDblClk(UINT nFlags, CPoint point)
 {
@@ -180,7 +171,7 @@ void CDrawingView::OnLButtonDblClk(UINT nFlags, CPoint point)
 
 	for (int i = pDoc->m_Elements.GetCount() - 1; i >= 0; i--)
 	{
-		if (((CShape*)pDoc->m_Elements[i])->IsMatched(pntLogical))
+		if (((CShape *)pDoc->m_Elements[i])->IsMatched(pntLogical))
 		{
 			delete pDoc->m_Elements[i];
 			pDoc->m_Elements.RemoveAt(i);
@@ -192,22 +183,21 @@ void CDrawingView::OnLButtonDblClk(UINT nFlags, CPoint point)
 	CScrollView::OnLButtonDblClk(nFlags, point);
 }
 
-
 void CDrawingView::OnRButtonDblClk(UINT nFlags, CPoint point)
 {
 	GET_LOGICAL_POINT_AND_PDOC
 
 	for (int i = pDoc->m_Elements.GetCount() - 1; i >= 0; i--)
 	{
-		if (((CShape*)pDoc->m_Elements[i])->IsMatched(pntLogical))
+		if (((CShape *)pDoc->m_Elements[i])->IsMatched(pntLogical))
 		{
-			CShapeDlg dlg((CShape*)pDoc->m_Elements[i]);
+			CShapeDlg dlg((CShape *)pDoc->m_Elements[i]);
 			if (dlg.DoModal() == IDOK)
 			{
 				// 释放旧的图元对象
 				delete pDoc->m_Elements[i];
 				// 设置新的图元对象
-				CShape * new_pShape = CShape::DynamicCShapeObj(dlg.GetCurShapeValueFromDlg());
+				CShape *new_pShape = CShape::DynamicCShapeObj(dlg.GetCurShapeValueFromDlg());
 				pDoc->m_Elements[i] = new_pShape;
 				pDoc->SetModifiedFlag();
 				pDoc->UpdateAllViews(NULL);
@@ -215,7 +205,6 @@ void CDrawingView::OnRButtonDblClk(UINT nFlags, CPoint point)
 			break;
 		}
 	}
-
 
 	CScrollView::OnRButtonDblClk(nFlags, point);
 }

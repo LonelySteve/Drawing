@@ -14,7 +14,7 @@ SHAPE_CLASS_SAMPLE_ARGS_CONSTRUCTOR_END(RECTANGLE, width(width), height(height))
 SHAPE_CLASS_FULL_ARGS_CONSTRUCTOR_START(CRectangle, int width, int height)
 SHAPE_CLASS_FULL_ARGS_CONSTRUCTOR_END(RECTANGLE, width(width), height(height))
 #pragma endregion
- 
+
 bool CRectangle::IsMatched(CPoint pnt)
 {
 	// X 轴方向的绝对偏移量计算
@@ -28,7 +28,7 @@ bool CRectangle::IsMatched(CPoint pnt)
 	return abs_offsetX <= half_of_width && abs_offsetY <= half_of_height;
 }
 
-void CRectangle::Serialize(CArchive & ar)
+void CRectangle::Serialize(CArchive &ar)
 {
 	if (ar.IsStoring())
 	{
@@ -42,8 +42,8 @@ void CRectangle::Serialize(CArchive & ar)
 	}
 	CShape::Serialize(ar);
 }
- 
-void CRectangle::ToDraw(CDC * pDC)
+
+void CRectangle::ToDraw(CDC *pDC)
 {
 	pDC->Rectangle(OrgX - width / 2, OrgY - height / 2, OrgX + width / 2, OrgY + height / 2);
 }
