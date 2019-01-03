@@ -39,3 +39,23 @@ protected:
 	virtual void ToDraw(CDC *pDC) = 0;
 	virtual void Serialize(CArchive &ar);
 };
+
+// 形状类宏定义开头
+#define SHAPE_CLASS_START(className,...)  \
+class className :public CShape  \
+{                               \
+private: \
+	DECLARE_SERIAL(className) \
+public: \
+	className();  \
+	className(const className & className##Obj); \
+	className(int orgX, int orgY,##__VA_ARGS__); \
+	className(int orgX, int orgY,##__VA_ARGS__, COLORREF fillColor, int fillType, COLORREF borderColor, int borderWidth, int borderType); \
+	virtual bool IsMatched(CPoint pnt); \
+	virtual void Serialize(CArchive &ar); \
+	void SetShapeValue(int orgX, int orgY, int widthEtc, CString text, int height); \
+	void GetShapeValue(ElementType *type, int *orgX, int *orgY, int *widthEtc, CString *text, int *height) const; \
+protected: \
+	virtual void ToDraw(CDC* pDC); 
+// 形状类宏定义结尾
+#define SHAPE_CLASS_END };
