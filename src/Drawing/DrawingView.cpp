@@ -158,9 +158,9 @@ void CDrawingView::OnLButtonDown(UINT nFlags, CPoint point)
 		{
 			CShape *new_pShape = CShape::DynamicCShapeObj(dlg.GetCurShapeValueFromDlg());
 			pDoc->m_Elements.Add(new_pShape);
+			pDoc->SetModifiedFlag();
+			pDoc->UpdateAllViews(NULL);
 		}
-		pDoc->SetModifiedFlag();
-		pDoc->UpdateAllViews(NULL);
 	}
 	CScrollView::OnLButtonDown(nFlags, point);
 }
