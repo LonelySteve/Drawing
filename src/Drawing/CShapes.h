@@ -5,3 +5,5 @@
 #include "CCircle.h"
 #include "CEllipse.h"
 #include "CText.h"
+
+#define SHAPE_TYPE_COUNT 6

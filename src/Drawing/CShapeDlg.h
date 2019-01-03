@@ -65,7 +65,7 @@ protected:
 	// 对话框类内部维护的图元基类指针
 	CShape *pShape;
 	// 对话框内部用来为维护每个类型的图元对象的指针数组
-	CShape *pShapes[6]{NULL};
+	CShape *pShapes[SHAPE_TYPE_COUNT]{NULL};
 
   protected:
 	virtual BOOL OnInitDialog();

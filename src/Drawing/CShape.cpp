@@ -30,12 +30,14 @@ CShape::CShape(const CShape & shape)
 {
 	shape.GetBrush(&FillColor, &FillType);
 	shape.GetPen(&BorderColor, &BorderWidth, &BorderType);
-	shape.GetShapeValue(&Type, &OrgX, &OrgY);
+	shape.GetShapeValue(&Type, &OrgX, &OrgY, NULL, NULL, NULL);
 }
+
 CShape::CShape(ElementType type, int orgX, int orgY)
 	:Type(type), OrgX(orgX), OrgY(orgY)
 {
 }
+
 CShape::CShape(ElementType type, int orgX, int orgY, COLORREF fillColor, int fillType, COLORREF borderColor, int borderWidth, int borderType)
 	: Type(type), OrgX(orgX), OrgY(orgY), FillColor(fillColor), FillType(fillType), BorderColor(borderColor), BorderType(borderType), BorderWidth(borderWidth)
 {
@@ -96,22 +98,22 @@ void CShape::Draw(CDC * pDC)
 
 	pDC->SelectObject(pOldPen);
 	pDC->SelectObject(pOldBrush);
-	#ifdef DEBUG
-		// 绘制反色原点
-		RECT rect{ OrgX - 3,OrgY - 3,OrgX + 3,OrgY + 3 };
-		pDC->InvertRect(&rect);
-	#endif // DEBUG
+#ifdef DEBUG
+	// 绘制反色原点
+	RECT rect{ OrgX - 3,OrgY - 3,OrgX + 3,OrgY + 3 };
+	pDC->InvertRect(&rect);
+#endif // DEBUG
 }
 
-void CShape::SetShapeValue(ElementType type, int orgX, int orgY)
+void CShape::SetShapeValue(int orgX, int orgY, int widthEtc, CString text, int height)
 {
-	Type = type;
 	OrgX = orgX;
 	OrgY = orgY;
 }
 
-void CShape::GetShapeValue(ElementType * type, int * orgX, int * orgY) const
+void CShape::GetShapeValue(ElementType * type, int * orgX, int * orgY, int * widthEtc, CString * text, int * height) const
 {
+
 	PTR_ASSIGN(type, Type);
 	PTR_ASSIGN(orgX, OrgX);
 	PTR_ASSIGN(orgY, OrgY);

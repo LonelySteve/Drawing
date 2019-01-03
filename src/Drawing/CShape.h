@@ -9,21 +9,22 @@ class CShape : public CObject
 {
 public:
 	static CShape * DynamicCShapeObj(const CShape * shape, bool copy = true);
+
 	CShape(const CShape& shape);
 	CShape(ElementType type, int orgX, int orgY);
 	CShape(ElementType type, int orgX, int orgY, COLORREF fillColor, int fillType, COLORREF borderColor, int borderWidth, int borderType);
 
+	ElementType GetShapeType() const;
 	void SetPen(COLORREF color, int width, int type);
 	bool GetPen(CPen &pen) const;
 	void GetPen(COLORREF *color, int *width, int *type) const;
 	void SetBrush(COLORREF color, int type);
 	bool GetBrush(CBrush &brush) const;
 	void GetBrush(COLORREF *color, int *type) const;
-	ElementType GetShapeType() const;
 	virtual void Draw(CDC *pDC);
 	virtual bool IsMatched(CPoint pnt) = 0;
-	void SetShapeValue(ElementType type, int orgX, int orgY);
-	void GetShapeValue(ElementType *type, int *orgX, int *orgY) const;
+	virtual void SetShapeValue(int orgX, int orgY, int widthEtc, CString text, int height);
+	virtual void GetShapeValue(ElementType *type, int *orgX, int *orgY, int *widthEtc, CString *text, int *height) const;
 
 protected:
 	ElementType Type;

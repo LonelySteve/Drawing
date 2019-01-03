@@ -11,7 +11,7 @@ CRectangle::CRectangle()
 
 CRectangle::CRectangle(const CRectangle & rectangle) : CShape(rectangle)
 {
-	rectangle.GetShapeValue(NULL, NULL, NULL, &width, &height);
+	rectangle.GetShapeValue(&Type, &OrgX, &OrgY, &width, NULL, &height);
 }
 
 CRectangle::CRectangle(int orgX, int orgY, int width, int height)
@@ -51,18 +51,19 @@ void CRectangle::Serialize(CArchive & ar)
 	}
 	CShape::Serialize(ar);
 }
-void CRectangle::SetShapeValue(ElementType type, int orgX, int orgY, int width, int height)
+void CRectangle::SetShapeValue(int orgX, int orgY, int widthEtc, CString text, int height)
 {
-	CShape::SetShapeValue(type, orgX, orgY);
-	this->width = width;
+	CShape::SetShapeValue(orgX, orgY, widthEtc, text, height);
+	this->width = widthEtc;
 	this->height = height;
 }
-void CRectangle::GetShapeValue(ElementType * type, int * orgX, int * orgY, int * width, int * height) const
+void CRectangle::GetShapeValue(ElementType * type, int * orgX, int * orgY, int * widthEtc, CString * text, int * height) const
 {
-	CShape::GetShapeValue(type, orgX, orgY);
-	PTR_ASSIGN(width, this->width);
+	CShape::GetShapeValue(type, orgX, orgY, widthEtc, text, height);
+	PTR_ASSIGN(widthEtc, this->width);
 	PTR_ASSIGN(height, this->height);
 }
+
 void CRectangle::ToDraw(CDC * pDC)
 {
 	pDC->Rectangle(OrgX - width / 2, OrgY - height / 2, OrgX + width / 2, OrgY + height / 2);

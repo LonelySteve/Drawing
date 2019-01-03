@@ -118,34 +118,6 @@ void CDrawingView::OnRButtonUp(UINT /* nFlags */, CPoint point)
 }
 
 
-void CDrawingView::OnLButtonDown(UINT nFlags, CPoint point)
-{
-	// TODO:  在此添加消息处理程序代码和/或调用默认值
-	if ((nFlags&MK_CONTROL) == MK_CONTROL)//Ctrl键按下
-	{
-		CDrawingDoc* pDoc = GetDocument();
-		ASSERT_VALID(pDoc);
-		if (!pDoc)	return;
-
-		CClientDC dc(this);
-		CPoint pntLogical = point;
-		OnPrepareDC(&dc);
-		dc.DPtoLP(&pntLogical);//DP->LP进行转换
-		// 默认选择正方形，并传递鼠标坐标
-		CSquare sample(pntLogical.x, pntLogical.y, 100);
-		CShapeDlg dlg(&sample);
-		if (dlg.DoModal() == IDOK)
-		{
-			CShape * new_pShape = CShape::DynamicCShapeObj(dlg.GetCurShapeValueFromDlg());
-			pDoc->m_Elements.Add(new_pShape);
-		}
-		pDoc->SetModifiedFlag();
-		pDoc->UpdateAllViews(NULL);
-	}
-	CScrollView::OnLButtonDown(nFlags, point);
-
-}
-
 
 // CDrawingView 诊断
 
@@ -179,6 +151,27 @@ CPoint pntLogical = point; \
 OnPrepareDC(&dc); \
 dc.DPtoLP(&pntLogical);//DP->LP进行转换
 
+void CDrawingView::OnLButtonDown(UINT nFlags, CPoint point)
+{
+	// TODO:  在此添加消息处理程序代码和/或调用默认值
+	if ((nFlags&MK_CONTROL) == MK_CONTROL)//Ctrl键按下
+	{
+		GET_LOGICAL_POINT_AND_PDOC
+
+		// 默认选择正方形，并传递鼠标坐标
+		CSquare sample(pntLogical.x, pntLogical.y, 100);
+		CShapeDlg dlg(&sample);
+		if (dlg.DoModal() == IDOK)
+		{
+			CShape * new_pShape = CShape::DynamicCShapeObj(dlg.GetCurShapeValueFromDlg());
+			pDoc->m_Elements.Add(new_pShape);
+		}
+		pDoc->SetModifiedFlag();
+		pDoc->UpdateAllViews(NULL);
+	}
+	CScrollView::OnLButtonDown(nFlags, point);
+
+}
 
 
 void CDrawingView::OnLButtonDblClk(UINT nFlags, CPoint point)

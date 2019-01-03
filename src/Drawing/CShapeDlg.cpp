@@ -5,7 +5,6 @@
 #include "Drawing.h"
 #include "afxdialogex.h"
 #include "CShapeDlg.h"
-#include "CShapes.h"
 #include "util.h"
 
 // CShapeDlg 对话框
@@ -78,6 +77,7 @@ END_MESSAGE_MAP()
 BOOL CShapeDlg::OnInitDialog()
 {
 	CDialogEx::OnInitDialog();
+
 	// 初始化 m_listBox_penType
 	m_listBox_penType.AddString(_T("PS_SOLID"));
 	m_listBox_penType.AddString(_T("PS_DASH"));
@@ -96,14 +96,14 @@ BOOL CShapeDlg::OnInitDialog()
 	m_listBox_brushType.AddString(_T("HS_SOLID"));
 
 	// 为每种图元对象建立单独的对象
-#define TM_1(index,className) PTR_VAL_ASSIGN(pShapes[index],new className())
+#define NEW_SHAPE(index,className) PTR_VAL_ASSIGN(pShapes[index],new className())
 
-	TM_1(0, CSquare);
-	TM_1(1, CRectangle);
-	TM_1(2, CCircle);
-	TM_1(3, CEllipse);
-	TM_1(4, CTriangle);
-	TM_1(5, CText);
+	NEW_SHAPE(0, CSquare);
+	NEW_SHAPE(1, CRectangle);
+	NEW_SHAPE(2, CCircle);
+	NEW_SHAPE(3, CEllipse);
+	NEW_SHAPE(4, CTriangle);
+	NEW_SHAPE(5, CText);
 
 	if (pShape != NULL)    // 这个时候是修改图元对象
 	{
@@ -120,8 +120,9 @@ BOOL CShapeDlg::OnInitDialog()
 	SetShapeValueToDlg(pShape);
 	// 更新UI启用状态
 	UpdateUIEnabledStatus();
-	// 更新界面，这个过程可能会触发 OnSelchangeComboShapeType 回调函数
+
 	UpdateData(FALSE);
+	
 
 	return TRUE;  // return TRUE unless you set the focus to a control
 				  // 异常: OCX 属性页应返回 FALSE
@@ -146,28 +147,15 @@ void CShapeDlg::SetShapeValueToDlg(
 	ElementType type;
 	CString text;
 	COLORREF penColor, brushColor;
-	int orgX, orgY, height = this->m_h, widthEtc, penWidth, penType, brushType;
+	int orgX = this->m_x, orgY = this->m_y,
+		height = this->m_h, widthEtc = this->m_wra,
+		penWidth = this->m_w, penType = this->m_pen_type,
+		brushType = this->m_brush_type;
+
 	shape->GetPen(&penColor, &penWidth, &penType);
 	shape->GetBrush(&brushColor, &brushType);
+	shape->GetShapeValue(&type, &orgX, &orgY, &widthEtc, &text, &height);
 
-#define TM_0(className,...)  \
-{ \
-		className & sq = (className &)*shape; \
-	sq.GetShapeValue(&type, &orgX, &orgY,##__VA_ARGS__); \
-		break; \
-}
-
-	switch (shape->GetShapeType())
-	{
-	case SQUARE:TM_0(CSquare, &widthEtc)
-	case RECTANGLE:TM_0(CRectangle, &widthEtc, &height)
-	case CIRCLE:TM_0(CCircle, &widthEtc)
-	case ELLIPSE:TM_0(CEllipse, &widthEtc, &height)
-	case TRIANGLE:TM_0(CTriangle, &widthEtc)
-	case TEXT:TM_0(CText, &widthEtc, &text, &height)
-	}
-
-#undef TM_0
 	IF_ASSIGN(setType, m_Type, type);
 	IF_ASSIGN(setOrgX, m_x, orgX);
 	IF_ASSIGN(setOrgY, m_y, orgY);
@@ -201,32 +189,8 @@ CShape* CShapeDlg::GetCurShapeValueFromDlg()
 {
 	pShapes[m_Type]->SetBrush(m_brush_color, m_brush_type);
 	pShapes[m_Type]->SetPen(m_pen_color, m_w, m_pen_type);
+	pShapes[m_Type]->SetShapeValue(m_x, m_y, m_wra, m_text, m_h);
 
-#define TM_2(className,index,...) \
-	PTR_CALL_METHOD(((className*)pShapes[index]), SetShapeValue(m_Type, m_x, m_y, m_wra,##__VA_ARGS__))
-
-	switch (m_Type)
-	{
-	case SQUARE:
-		TM_2(CSquare, 0);
-		break;
-	case RECTANGLE:
-		TM_2(CRectangle, 1, m_h);
-		break;
-	case CIRCLE:
-		TM_2(CCircle, 2);
-		break;
-	case ELLIPSE:
-		TM_2(CEllipse, 3, m_h);
-		break;
-	case TRIANGLE:
-		TM_2(CTriangle, 4);
-		break;
-	case TEXT:
-		TM_2(CText, 5, m_text, m_h);
-		break;
-	}
-#undef TM_2
 	return pShapes[m_Type];
 }
 
@@ -285,23 +249,32 @@ void CShapeDlg::OnClickedBrushColorButton()
 
 void CShapeDlg::OnSelchangeComboShapeType()
 {
-	int oldType = m_Type;
+#pragma region 储存索引变化前的图元类型对象信息
+	// 临时储存一下旧的图元类型指示值
+	ElementType oldType = m_Type;
+	// 更新数据到数据成员
 	UpdateData(TRUE);
-	m_Type = (ElementType)oldType;
+	// 临时储存一下新的图元类型指示值
+	ElementType newType = m_Type;
+	// 让当前图元值类型指示值临时赋值为旧的图元类型
+	m_Type = oldType;
+	// 将索引变化之前的数据储存至对应类型的图元对象中
 	GetCurShapeValueFromDlg();
-	// 从控件中交换数据到值类型数据成员
-	// 这里主要是为了刷新当前ComboBox的索引，即 m_Type
-	UpdateData(TRUE);
+#pragma endregion
+#pragma region 更新控件状态或值
+	// 恢复当前图元类型指示值
+	m_Type = newType;
+	// 更改相应的UI启用状态
 	UpdateUIEnabledStatus();
-	// 取当前图元对象的值到对话框的数据成员中
+	// 更新当前图元对象的值到对话框的数据成员中（仅更新图元类型，宽度等，高度以及文字属性）
 	SetShapeValueToDlg(pShapes[m_Type], true, false, false, true, true, true, false, false, false, false, false);
 	// 刷新界面元素
 	UpdateData(FALSE);
+	// 重绘用于呈现颜色的编辑框
 	m_edit_penColor.Invalidate();
-	// 立即发生重绘
 	m_edit_penColor.UpdateWindow();
 	m_edit_brushColor.Invalidate();
-	// 立即发生重绘
 	m_edit_brushColor.UpdateWindow();
+#pragma endregion
 }
 

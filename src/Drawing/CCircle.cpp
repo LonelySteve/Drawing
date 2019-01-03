@@ -11,7 +11,7 @@ CCircle::CCircle()
 
 CCircle::CCircle(const CCircle & circle) : CShape(circle)
 {
-	circle.GetShapeValue(NULL, NULL, NULL, &radius);
+	circle.GetShapeValue(&Type, &OrgX, &OrgY, &radius, NULL, NULL);
 }
 
 CCircle::CCircle(int orgX, int orgY, int radius)
@@ -44,16 +44,16 @@ void CCircle::Serialize(CArchive & ar)
 	CShape::Serialize(ar);
 }
 
-void CCircle::SetShapeValue(ElementType type, int orgX, int orgY, int radius)
+void CCircle::SetShapeValue(int orgX, int orgY, int widthEtc, CString text, int height)
 {
-	CShape::SetShapeValue(type, orgX, orgY);
-	this->radius = radius;
+	CShape::SetShapeValue(orgX, orgY, widthEtc, text, height);
+	this->radius = widthEtc;
 }
 
-void CCircle::GetShapeValue(ElementType * type, int * orgX, int * orgY, int * radius) const
+void CCircle::GetShapeValue(ElementType * type, int * orgX, int * orgY, int * widthEtc, CString * text, int * height) const
 {
-	CShape::GetShapeValue(type, orgX, orgY);
-	PTR_ASSIGN(radius, this->radius);
+	CShape::GetShapeValue(type, orgX, orgY, widthEtc, text, height);
+	PTR_ASSIGN(widthEtc, this->radius);
 }
 
 void CCircle::ToDraw(CDC * pDC)

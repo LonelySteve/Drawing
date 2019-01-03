@@ -11,7 +11,7 @@ CText::CText()
 
 CText::CText(const CText & text) : CShape(text)
 {
-	text.GetShapeValue(NULL, NULL, NULL, &angle, &this->text, &height);
+	text.GetShapeValue(&Type, &OrgX, &OrgY, &angle, &this->text, &height);
 }
 
 CText::CText(int orgX, int orgY, CString text, int height, int angle)
@@ -61,18 +61,18 @@ void CText::Serialize(CArchive & ar)
 	CShape::Serialize(ar);
 }
 
-void CText::SetShapeValue(ElementType type, int orgX, int orgY, int angle, CString text, int height)
+void CText::SetShapeValue(int orgX, int orgY, int widthEtc, CString text, int height)
 {
-	CShape::SetShapeValue(type, orgX, orgY);
+	CShape::SetShapeValue(orgX, orgY, widthEtc, text, height);
 	this->text = text;
 	this->height = height;
-	this->angle = angle;
+	this->angle = widthEtc;
 }
 
-void CText::GetShapeValue(ElementType * type, int * orgX, int * orgY, int * angle, CString * text, int * height) const
+void CText::GetShapeValue(ElementType * type, int * orgX, int * orgY, int * widthEtc, CString * text, int * height) const
 {
-	CShape::GetShapeValue(type, orgX, orgY);
-	PTR_ASSIGN(angle, this->angle);
+	CShape::GetShapeValue(type, orgX, orgY, widthEtc, text, height);
+	PTR_ASSIGN(widthEtc, this->angle);
 	PTR_ASSIGN(text, this->text);
 	PTR_ASSIGN(height, this->height);
 }

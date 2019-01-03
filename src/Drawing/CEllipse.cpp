@@ -11,7 +11,7 @@ CEllipse::CEllipse()
 
 CEllipse::CEllipse(const CEllipse & ellipse) : CShape(ellipse)
 {
-	ellipse.GetShapeValue(NULL, NULL, NULL, &width, &height);
+	ellipse.GetShapeValue(&Type, &OrgX, &OrgY, &width, NULL, &height);
 }
 
 CEllipse::CEllipse(int orgX, int orgY, int width, int height)
@@ -47,18 +47,19 @@ void CEllipse::Serialize(CArchive & ar)
 	}
 	CShape::Serialize(ar);
 }
-void CEllipse::SetShapeValue(ElementType type, int orgX, int orgY, int width, int height)
+void CEllipse::SetShapeValue(int orgX, int orgY, int widthEtc, CString text, int height)
 {
-	CShape::SetShapeValue(type, orgX, orgY);
-	this->width = width;
+	CShape::SetShapeValue(orgX, orgY, widthEtc, text, height);
+	this->width = widthEtc;
 	this->height = height;
 }
-void CEllipse::GetShapeValue(ElementType * type, int * orgX, int * orgY, int * width, int * height) const
+void CEllipse::GetShapeValue(ElementType * type, int * orgX, int * orgY, int * widthEtc, CString * text, int * height) const
 {
-	CShape::GetShapeValue(type, orgX, orgY);
-	PTR_ASSIGN(width, this->width);
+	CShape::GetShapeValue(type, orgX, orgY, widthEtc, text, height);
+	PTR_ASSIGN(widthEtc, this->width);
 	PTR_ASSIGN(height, this->height);
 }
+ 
 void CEllipse::ToDraw(CDC * pDC)
 {
 	pDC->Ellipse(OrgX - width / 2, OrgY - height / 2, OrgX + width / 2, OrgY + height / 2);

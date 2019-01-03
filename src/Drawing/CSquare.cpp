@@ -12,7 +12,7 @@ CSquare::CSquare()
 
 CSquare::CSquare(const CSquare & square) : CShape(square)
 {
-	square.GetShapeValue(NULL, NULL, NULL, &width);
+	square.GetShapeValue(&Type, &OrgX, &OrgY, &width, NULL, NULL);
 }
 
 CSquare::CSquare(int orgX, int orgY, int width)
@@ -50,16 +50,16 @@ void CSquare::Serialize(CArchive & ar)
 	CShape::Serialize(ar);
 }
 
-void CSquare::SetShapeValue(ElementType type, int orgX, int orgY, int width)
+void CSquare::SetShapeValue(int orgX, int orgY, int widthEtc, CString text, int height)
 {
-	CShape::SetShapeValue(type, orgX, orgY);
-	this->width = width;
+	CShape::SetShapeValue(orgX, orgY, widthEtc, text, height);
+	this->width = widthEtc;
 }
 
-void CSquare::GetShapeValue(ElementType * type, int * orgX, int * orgY, int *width) const
+void CSquare::GetShapeValue(ElementType * type, int * orgX, int * orgY, int * widthEtc, CString * text, int * height) const
 {
-	CShape::GetShapeValue(type, orgX, orgY);
-	PTR_ASSIGN(width, this->width);
+	CShape::GetShapeValue(type, orgX, orgY, widthEtc, text, height);
+	PTR_ASSIGN(widthEtc, this->width);
 }
 
 void CSquare::ToDraw(CDC * pDC)

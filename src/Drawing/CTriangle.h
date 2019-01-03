@@ -12,8 +12,9 @@ public:
 
 	virtual bool IsMatched(CPoint pnt);
 	virtual void Serialize(CArchive &ar);
-	void SetShapeValue(ElementType type, int orgX, int orgY, int width);
-	void GetShapeValue(ElementType *type, int *orgX, int *orgY, int *width) const;
+
+	void SetShapeValue(int orgX, int orgY, int widthEtc, CString text, int height);
+	void GetShapeValue(ElementType *type, int *orgX, int *orgY, int *widthEtc, CString *text, int *height) const;
 
 protected:
 	int width;

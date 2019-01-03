@@ -10,7 +10,7 @@ CTriangle::CTriangle() :CShape(TRIANGLE, 0, 0), width(100)
 
 CTriangle::CTriangle(const CTriangle & triangle) : CShape(triangle)
 {
-	triangle.GetShapeValue(NULL, NULL, NULL, &width);
+	triangle.GetShapeValue(&Type, &OrgX, &OrgY, &width, NULL, NULL); 
 }
 
 CTriangle::CTriangle(int orgX, int orgY, int width)
@@ -49,16 +49,18 @@ void CTriangle::Serialize(CArchive & ar)
 	}
 	CShape::Serialize(ar);
 }
-void CTriangle::SetShapeValue(ElementType type, int orgX, int orgY, int width)
+
+void CTriangle::SetShapeValue(int orgX, int orgY, int widthEtc, CString text, int height)
 {
-	CShape::SetShapeValue(type, orgX, orgY);
-	this->width = width;
+	CShape::SetShapeValue(orgX, orgY, widthEtc, text, height);
+	this->width = widthEtc;
 }
-void CTriangle::GetShapeValue(ElementType * type, int * orgX, int * orgY, int * width) const
+void CTriangle::GetShapeValue(ElementType * type, int * orgX, int * orgY, int * widthEtc, CString * text, int * height) const
 {
-	CShape::GetShapeValue(type, orgX, orgY);
-	PTR_ASSIGN(width, this->width);
+	CShape::GetShapeValue(type, orgX, orgY, widthEtc, text, height);
+	PTR_ASSIGN(widthEtc, this->width);
 }
+
 void CTriangle::ToDraw(CDC * pDC)
 {
 	POINT ps[3]{
